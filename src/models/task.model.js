@@ -5,9 +5,9 @@ const COLLECTION_NAME = "Tasks";
 
 const taskSchema = new Schema(
   {
-    task_name: String,
-    task_description: String,
-    task_status: {
+    taskName: String,
+    taskDescription: String,
+    taskStatus: {
       type: String,
       enum: ["Open", "In Progress", "Closed"],
       default: "Open",

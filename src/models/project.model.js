@@ -5,9 +5,9 @@ const COLLECTION_NAME = "Projects";
 
 const projectSchema = new Schema(
   {
-    project_name: String,
-    project_description: String,
-    progress_task: Number,
+    projectName: String,
+    projectDescription: String,
+    progressTask: Number,
     members: {
       type: [Schema.Types.ObjectId],
       default: [],
