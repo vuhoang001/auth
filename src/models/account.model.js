@@ -28,6 +28,10 @@ const accountSchema = new Schema(
       type: Array,
       default: [],
     },
+    thumbnail: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

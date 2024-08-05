@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require("./database/init.mongodb");
-app.use("/v1/api/", require("./routes/index"));
+app.use("/", require("./routes/index"));
 
 app.use((req, res, next) => {
   const err = new Error("Not found");

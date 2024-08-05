@@ -28,9 +28,7 @@ const createTokensPair = async (payload) => {
     return {
       accessToken,
       refreshToken,
-      rtokenIat: rtokenTime.iat,
       rtokenExp: rtokenTime.exp,
-      atokenIat: atokenTime.iat,
       atokenExp: atokenTime.exp,
     };
   } catch (error) {
@@ -43,7 +41,6 @@ const authentication = AsyncHandle(async (req, res, next) => {
   const refreshToken = req.headers[HEADER.REFRESHTOKEN];
   let accessToken;
   if (Bearer) accessToken = Bearer.split(" ")[1];
-  console.log("refreshToken", refreshToken);
   if (refreshToken) {
     const decodedUser = jwt.verify(
       refreshToken,
@@ -64,7 +61,6 @@ const authentication = AsyncHandle(async (req, res, next) => {
     const holderAccount = await getAccountById(decodedUser.UserId);
     if (!holderAccount)
       throw new AuthFailureError("Error: Invalid access token!");
-
     req.user = decodedUser;
   }
   next();

@@ -12,7 +12,7 @@ router.use(authentication);
 
 router.post("/logout", AsynHandle(AccessController.logout));
 router.post(
-  "/handle-refresh-token",
+  "/handle-refresh",
   AsynHandle(AccessController.handleRefreshToken)
 );
 

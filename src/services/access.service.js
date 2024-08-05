@@ -89,10 +89,8 @@ class AccessService {
         object: foundAccount,
       }),
       accessToken: tokens.accessToken,
-      atokenIat: tokens.atokenIat,
       atokenExp: tokens.atokenExp,
       refreshToken: tokens.refreshToken,
-      rtokenIat: tokens.rtokenIat,
       rtokenExp: tokens.rtokenExp,
     };
   };
@@ -109,7 +107,7 @@ class AccessService {
     const keyStore = await KeyTokenService.findKeyTokenByRefreshToken(
       refreshToken
     );
-    if (!keyStore) throw new BadRequestError("Error: Cant find keyStore");
+    if (!keyStore) throw new BadRequestError("Unauthorcation");
 
     if (keyStore.refreshTokenUsed.includes(refreshToken)) {
       await KeyTokenService.removeKeyTokenById(userId);
@@ -148,10 +146,8 @@ class AccessService {
         email,
       },
       accessToken: tokens.accessToken,
-      atokenIat: tokens.atokenIat,
       atokenExp: tokens.atokenExp,
       refreshToken: tokens.refreshToken,
-      rtokenIat: tokens.rtokenIat,
       rtokenExp: tokens.rtokenExp,
     };
   };
