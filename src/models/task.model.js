@@ -36,7 +36,7 @@ const taskSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    startDate: {
+    toDate: {
       type: Date,
       default: function () {
         const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000;
