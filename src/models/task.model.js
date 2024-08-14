@@ -31,7 +31,18 @@ const taskSchema = new Schema(
         comment: { type: String },
         createdAt: { type: Date, default: Date.now },
       },
-    ]
+    ],
+    fromDate: {
+      type: Date,
+      default: Date.now,
+    },
+    startDate: {
+      type: Date,
+      default: function () {
+        const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+        return new Date(this.fromDate.getTime() + sevenDaysInMilliseconds);
+      },
+    },
   },
   { timestamps: true, collection: COLLECTION_NAME }
 );
