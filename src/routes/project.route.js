@@ -9,8 +9,8 @@ const AsyncHandle = require("../helpers/AsyncHandle");
 router.get("/", AsynHandle(ProjectController.GetAllProjects));
 router.use(authentication);
 router.post("/", AsynHandle(ProjectController.CreateProject));
-router.patch("/update/:id", AsynHandle(ProjectController.UpdateProject));
-router.delete("/delete/:id", AsynHandle(ProjectController.DeleteProject));
+router.patch("/:id", AsynHandle(ProjectController.UpdateProject));
+router.delete("/:id", AsynHandle(ProjectController.DeleteProject));
 router.get("/:id", AsyncHandle(ProjectController.GetProject));
 
 module.exports = router;

@@ -41,6 +41,9 @@ const authentication = AsyncHandle(async (req, res, next) => {
   const refreshToken = req.headers[HEADER.REFRESHTOKEN];
   let accessToken;
   if (Bearer) accessToken = Bearer.split(" ")[1];
+
+  if (!refreshToken && !accessToken)
+    throw new AuthFailureError("Invalid token or token expired");
   if (refreshToken) {
     const decodedUser = jwt.verify(
       refreshToken,

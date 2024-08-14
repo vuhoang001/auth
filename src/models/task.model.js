@@ -22,11 +22,6 @@ const taskSchema = new Schema(
       default: [],
       ref: "Account",
     },
-    project: {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-      required: true,
-    },
     comments: [
       {
         user: {
@@ -36,7 +31,7 @@ const taskSchema = new Schema(
         comment: { type: String },
         createdAt: { type: Date, default: Date.now },
       },
-    ],
+    ]
   },
   { timestamps: true, collection: COLLECTION_NAME }
 );

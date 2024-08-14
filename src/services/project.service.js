@@ -1,6 +1,8 @@
 const projectModel = require("../models/project.model");
+const columnModel = require("../models/column.model");
 const { BadRequestError } = require("../core/error.response");
 const { convertToObjectIdMongose } = require("../utils/index");
+const mongoose = require("mongoose");
 
 const { getAllProducts } = require("../models/repo/project.repo");
 class ProjectService {
@@ -40,15 +42,17 @@ class ProjectService {
         "Error: Something went wrong cant delete project"
       );
 
-    const deleteProject = await projectModel.findOneAndDelete({
+    const ObjectColumnIds = holderProject.columnIds;
+
+    await columnModel.deleteMany({
+      _id: { $in: ObjectColumnIds },
+    });
+
+    await projectModel.findOneAndDelete({
       _id: projectId,
     });
-    if (!deleteProject)
-      throw new BadRequestError(
-        "Error: Something went wrong cant delete project"
-      );
 
-    return deleteProject;
+    return 1;
   };
 
   GetProjectById = async (projectId) => {
