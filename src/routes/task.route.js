@@ -5,12 +5,12 @@ const TaskController = require("../controllers/task.controller");
 const { authentication } = require("../auth/authUtils");
 const { handleValidationErrors } = require("../middlewares/validate/validate");
 const {
-  createColumnValidator,
-} = require("../middlewares/validate/column.validate");
+  createTaskValidator,
+} = require("../middlewares/validate/task.validate");
 // router.use(authentication);
 router.post(
   "/:id",
-  createColumnValidator(),
+  createTaskValidator(),
   handleValidationErrors,
   AsyncHandle(TaskController.CreateTask)
 );
