@@ -8,7 +8,7 @@ const projectSchema = new Schema(
     projectName: String,
     projectDescription: String,
     progressTask: Number,
-    columnIds: { type: [Schema.Types.ObjectId], default: [] },
+    columnIds: { type: [Schema.Types.ObjectId], default: [], ref: 'Column' },
     fromDate: { type: Date, default: Date() },
     toDate: { type: Date, default: Date() },
     members: {

@@ -21,7 +21,7 @@ class ColumnService {
   };
 
   GetAllColumns = async () => {
-    const data = await columnModel.find();
+    const data = await columnModel.find().populate('taskIds').exec();
     if (!data) throw new BadRequestError("Error: Cant get all column");
     return data;
   };

@@ -9,6 +9,7 @@ const ColumnSchema = new Schema(
     taskIds: {
       type: [Types.ObjectId],
       default: [],
+      ref: 'Task'
     }
   },
   {

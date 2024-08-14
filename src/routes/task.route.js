@@ -4,7 +4,7 @@ const AsyncHandle = require("../helpers/AsyncHandle");
 const TaskController = require("../controllers/task.controller");
 const { authentication } = require("../auth/authUtils");
 
-router.use(authentication);
+// router.use(authentication);
 router.post("/:id", AsyncHandle(TaskController.CreateTask));
 router.get("/", AsyncHandle(TaskController.GetAllTasks));
 router.get("/:id", AsyncHandle(TaskController.GetTaskById));
