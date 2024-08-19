@@ -9,8 +9,8 @@ const taskSchema = new Schema(
     taskDescription: String,
     taskStatus: {
       type: String,
-      enum: ["Open", "In Progress", "Closed"],
-      default: "Open",
+      enum: ["Công việc cần làm", "Đang tiến hành", "Kiểm tra", "Hoàn thành"],
+      default: "Công việc cần làm",
     },
     priority: {
       type: String,
