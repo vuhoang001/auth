@@ -1,10 +1,14 @@
 const ColumnService = require("../services/column.service");
 const { SuccessResponse } = require("../core/success.response");
 class ColumnController {
+
+  
+
   GetAllColumn = async (req, res, next) => {
+    const idProject = req.query.projectId;
     new SuccessResponse({
-      message: "Get all column success",
-      metadata: await ColumnService.GetAllColumns(),
+      message: "Get all columns by id project success",
+      metadata: await ColumnService.GetAllColumns(idProject),
     }).send(res);
   };
 

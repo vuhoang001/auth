@@ -13,7 +13,7 @@ class ProjectController {
   UpdateProject = async (req, res, next) => {
     const projectId = req.params.id;
     new SuccessResponse({
-      message: "Update project success",
+      message: "Updated project success",
       metadata: await ProjectService.UpdateProject(req.body, projectId),
     }).send(res);
   };

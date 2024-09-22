@@ -1,11 +1,6 @@
 const AccountModel = require("../models/account.model");
 const ForgetPasswordModel = require("../models/forgetPassword.model");
-const {
-  BadRequestError,
-  AuthFailureError,
-  ConflictError,
-  NotFoundError,
-} = require("../core/error.response");
+const { BadRequestError, AuthFailureError } = require("../core/error.response");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { createTokensPair } = require("../auth/authUtils");
@@ -19,7 +14,6 @@ const { sendMail } = require("../configs/nodemailer.config");
 
 class AccessService {
   signUp = async ({ name, email, password }) => {
-    console.log(name, email, password);
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");
 
@@ -59,8 +53,8 @@ class AccessService {
     };
   };
 
-  login = async ({ email, password }) => {
-    const foundAccount = await AccountModel.findOne({ email });
+  login = async ({ username, password }) => {
+    const foundAccount = await AccountModel.findOne({ email: username });
 
     if (!foundAccount)
       throw new AuthFailureError("Error: Account is not registed!");
@@ -110,7 +104,7 @@ class AccessService {
     if (!keyStore) throw new BadRequestError("Unauthorcation");
 
     if (keyStore.refreshTokenUsed.includes(refreshToken)) {
-      await KeyTokenService.removeKeyTokenById(userId);
+      await KeyTokenService.removeKeyTokenByUserId(userId);
       throw new AuthFailureError("Error: Something went wrong! Please relogin");
     }
 

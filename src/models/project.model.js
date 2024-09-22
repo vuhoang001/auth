@@ -9,8 +9,8 @@ const projectSchema = new Schema(
     projectDescription: String,
     progressTask: Number,
     columnIds: { type: [Schema.Types.ObjectId], default: [], ref: 'Column' },
-    fromDate: { type: Date, default: Date() },
-    toDate: { type: Date, default: Date() },
+    fromDate: { type: Date, default: Date.now },
+    toDate: { type: Date, default: Date.now },
     members: {
       type: [Schema.Types.ObjectId],
       default: [],

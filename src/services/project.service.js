@@ -1,8 +1,7 @@
 const projectModel = require("../models/project.model");
 const columnModel = require("../models/column.model");
-const { BadRequestError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const { convertToObjectIdMongose } = require("../utils/index");
-const mongoose = require("mongoose");
 
 const { getAllProducts } = require("../models/repo/project.repo");
 class ProjectService {
@@ -20,17 +19,21 @@ class ProjectService {
   };
 
   UpdateProject = async (payload, projectId) => {
-    const holderProject = await projectModel.findOne({ _id: projectId });
-    if (!holderProject)
-      throw new BadRequestError("Error: Something went wrong!");
+    const holderProject = await projectModel.findOne({
+      _id: convertToObjectIdMongose(projectId),
+    });
 
-    const updateProject = await projectModel.findOneAndUpdate(
+    if (!holderProject)
+      throw new NotFoundError("Not found");
+
+    const updateProject = await projectModel.findByIdAndUpdate(
       convertToObjectIdMongose(projectId),
       payload,
       { new: true }
     );
+  
     if (!updateProject)
-      throw new "Error: Something went wrong cant updateProject"();
+      throw new BadRequestError("Error: Something went wrong cant updateProject");
 
     return updateProject;
   };
@@ -38,8 +41,8 @@ class ProjectService {
   DeleteProject = async (projectId) => {
     const holderProject = await projectModel.findOne({ _id: projectId });
     if (!holderProject)
-      throw new BadRequestError(
-        "Error: Something went wrong cant delete project"
+      throw new NotFoundError(
+        "Not found project"
       );
 
     const ObjectColumnIds = holderProject.columnIds;
@@ -58,7 +61,7 @@ class ProjectService {
   GetProjectById = async (projectId) => {
     const data = await projectModel.findOne({ _id: projectId });
     if (!data)
-      throw new BadRequestError("Error: Something went wrong! Can get project");
+      throw new NotFoundError("Error: Something went wrong! Can get project");
     return data;
   };
 

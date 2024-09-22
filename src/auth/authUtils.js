@@ -43,15 +43,14 @@ const authentication = AsyncHandle(async (req, res, next) => {
   if (Bearer) accessToken = Bearer.split(" ")[1];
 
   if (!refreshToken && !accessToken)
-    throw new AuthFailureError("Invalid token or token expired");
+    throw new AuthFailureError("Invalid token");
   if (refreshToken) {
     const decodedUser = jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
     const holderAccount = await getAccountById(decodedUser.UserId);
-    if (!holderAccount)
-      throw new AuthFailureError("Error: Invalid refresh token!");
+    if (!holderAccount) throw new AuthFailureError("Invalid refresh token!");
     req.user = decodedUser;
     req.refreshToken = refreshToken;
   }
@@ -62,9 +61,9 @@ const authentication = AsyncHandle(async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET
     );
     const holderAccount = await getAccountById(decodedUser.UserId);
-    if (!holderAccount)
-      throw new AuthFailureError("Error: Invalid access token!");
+    if (!holderAccount) throw new AuthFailureError("Invalid access token!");
     req.user = decodedUser;
+    console.log(req.user);
   }
   next();
 });

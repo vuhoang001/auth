@@ -20,10 +20,14 @@ class ColumnService {
     return res;
   };
 
-  GetAllColumns = async () => {
-    const data = await columnModel.find().populate('taskIds').exec();
+  GetAllColumns = async (projectId) => {
+    console.log(projectId);
+    const data = await projectModel
+      .findById(projectId)
+      .populate("columnIds")
+      .exec();
     if (!data) throw new BadRequestError("Error: Cant get all column");
-    return data;
+    return data.columnIds;
   };
 
   UpdateColumn = async (payload, idColumn) => {
@@ -54,7 +58,7 @@ class ColumnService {
 
     if (!holderProject)
       throw new BadRequestError("Lỗi: Không thể xóa cột khỏi dự án");
-    
+
     const holderColumn = await columnModel.findOneAndDelete({ _id: idColumn });
     if (!holderColumn) throw new BadRequestError("Lỗi: Không thể xóa cột");
 

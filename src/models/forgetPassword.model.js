@@ -7,10 +7,6 @@ const ForgetPasswordSchema = new Schema(
   {
     email: String,
     token: String,
-    expireAt: {
-      type: Date,
-      expires: 60,
-    },
   },
   {
     timestamps: true,
