@@ -45,6 +45,7 @@ class TaskService {
   };
 
   DeleteTask = async (taskId) => {
+    console.log(taskId)
     const holderColumn = await columnModel.findOneAndUpdate(
       {
         taskIds: taskId,

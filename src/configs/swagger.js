@@ -40,6 +40,14 @@ const swaggerOptions = {
         name: "Project",
         description: "Project access management endpoints",
       },
+      {
+        name: "Columns",
+        description: "Column access management endpoints",
+      },
+      {
+        name: "Tasks",
+        description: "Tasks access management endpoints",
+      },
     ],
   },
   // Sử dụng path.join để đảm bảo đường dẫn chính xác

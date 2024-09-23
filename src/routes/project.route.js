@@ -9,12 +9,16 @@ const {
   createProjectValidator,
 } = require("../middlewares/validate/project.validate");
 
+router.use(authentication);
+
 /**
  * @swagger
  * /projects:
  *  get:
  *    summary: Retrive a list of projects
  *    tags: [Project]
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: A list of projects
@@ -22,8 +26,6 @@ const {
  *        description: Server error
  */
 router.get("/", AsynHandle(ProjectController.GetAllProjects));
-
-router.use(authentication);
 
 /**
  * @swagger
@@ -178,7 +180,7 @@ router.delete("/:id", AsynHandle(ProjectController.DeleteProject));
  *    summary: Get a project
  *    tags: [Project]
  *    security:
- *      - beaereAuth: []
+ *      - bearerAuth: []
  *    parameters:
  *      - name: id
  *        in: path
@@ -188,8 +190,8 @@ router.delete("/:id", AsynHandle(ProjectController.DeleteProject));
  *          type: string
  *    responses:
  *      200:
- *        description: Get project success 
- *      400: 
+ *        description: Get project success
+ *      400:
  *        description: NotFoundError
  */
 router.get("/:id", AsyncHandle(ProjectController.GetProject));

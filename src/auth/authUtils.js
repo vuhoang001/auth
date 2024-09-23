@@ -63,7 +63,6 @@ const authentication = AsyncHandle(async (req, res, next) => {
     const holderAccount = await getAccountById(decodedUser.UserId);
     if (!holderAccount) throw new AuthFailureError("Invalid access token!");
     req.user = decodedUser;
-    console.log(req.user);
   }
   next();
 });
