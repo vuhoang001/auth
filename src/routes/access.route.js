@@ -4,6 +4,8 @@ const AsynHandle = require("../helpers/AsyncHandle");
 const AccessController = require("../controllers/access.controller");
 const { authentication } = require("../auth/authUtils");
 
+router.get("/socket", AsynHandle(AccessController.socket));
+
 /**
  * @swagger
  * /signup:

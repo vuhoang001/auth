@@ -1,6 +1,13 @@
 const { SuccessResponse } = require("../core/success.response");
 const AccessService = require("../services/access.service");
 class AccessController {
+  socket = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Socket test",
+      metadata: await AccessService.socket(),
+    }).send(res);
+  };
+
   signUp = async (req, res, next) => {
     new SuccessResponse({
       message: "Register success!",

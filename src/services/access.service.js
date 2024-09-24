@@ -12,7 +12,16 @@ const {
 } = require("../models/repo/account.repo");
 const { sendMail } = require("../configs/nodemailer.config");
 
+const { getIo } = require("../configs/socket.config");
+
 class AccessService {
+  socket = async () => {
+    const io = getIo(); // Lấy đối tượng io
+    const message = "hello client";
+    io.emit("message", message); // Gửi tin nhắn qua socket
+    return "Message sent via socket";
+  };
+
   signUp = async ({ name, email, password }) => {
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");
