@@ -1,0 +1,199 @@
+paths:
+  projects/{projectId}/task/{taskId}/subTask/:
+    post:
+      summary: Create a subtask
+      tags: [SubTasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idTask
+          in: path
+          required: true
+          description: ID of the task to which the subtask belongs
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subTaskName:
+                  type: string
+                  description: Name of the subtask
+                statusTask:
+                  type: boolean
+                  description: Status of the subtask
+      responses:
+        201:
+          description: Subtask created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  subTaskName:
+                    type: string
+                  statusTask:
+                    type: boolean
+        401:
+          description: Unauthorized
+        404:
+          description: Task not found
+        500:
+          description: Internal server error
+
+    get:
+      summary: Get all subtasks
+      tags: [SubTasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idTask
+          in: path
+          required: true
+          description: ID of the task to which the subtasks belong
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved the list of subtasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    subTaskName:
+                      type: string
+                    statusTask:
+                      type: boolean
+        401:
+          description: Unauthorized
+        404:
+          description: Task not found
+        500:
+          description: Internal server error
+
+  projects/{projectId}/task/{taskId}/subTask/:subTaskId:
+    patch: 
+      summary: Edit subtask
+      tags: [SubTasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idTask
+          in: path
+          required: true
+          description: ID of task
+          schema:
+            type: string
+        - name: idSubTask
+          in: path
+          required: true
+          description: ID of subtask
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subTaskName:
+                  type: string
+                  description: Name of the subtask
+                statusTask:
+                  type: boolean
+                  description: Status of the subtask
+      responses:
+        200: # Thay vì 201, sử dụng 200
+          description: Successfully updated subtask
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  subTaskName:
+                    type: string
+                  statusTask:
+                    type: boolean
+        401:
+          description: Unauthorized
+        404:
+          description: Task or Subtask not found
+        500:
+          description: Internal server error
+
+    delete:
+      summary: Delete subtask
+      tags: [SubTasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idSubTask
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Subtask created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  subTaskName:
+                    type: string
+                  statusTask:
+                    type: boolean
+        401:
+          description: Unauthorized
+        404:
+          description: Task not found
+        500:
+          description: Internal server error
+
+    get:
+      summary: get subtask
+      tags: [SubTasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idSubTask
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Subtask created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  subTaskName:
+                    type: string
+                  statusTask:
+                    type: boolean
+        401:
+          description: Unauthorized
+        404:
+          description: Task not found
+        500:
+          description: Internal server error

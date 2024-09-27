@@ -22,6 +22,11 @@ const taskSchema = new Schema(
       default: [],
       ref: "Account",
     },
+    subTaskIds: {
+      type: [Schema.Types.ObjectId],
+      default: [],
+      ref: "SubTask",
+    },
     comments: [
       {
         user: {

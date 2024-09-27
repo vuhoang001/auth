@@ -7,8 +7,11 @@ const projectSchema = new Schema(
   {
     projectName: String,
     projectDescription: String,
-    progressTask: Number,
-    columnIds: { type: [Schema.Types.ObjectId], default: [], ref: 'Column' },
+    progressTask: {
+      type: Number,
+      default: 0,
+    },
+    columnIds: { type: [Schema.Types.ObjectId], default: [], ref: "Column" },
     fromDate: { type: Date, default: Date.now },
     toDate: { type: Date, default: Date.now },
     members: {
@@ -16,6 +19,11 @@ const projectSchema = new Schema(
       default: [],
     },
     owner: Schema.Types.ObjectId,
+    status: {
+      type: String,
+      enum: ["public", "private"],
+      default: "private",
+    },
   },
   { timestamps: true, collection: COLLECTION_NAME }
 );

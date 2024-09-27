@@ -1,12 +1,31 @@
 const projectModel = require("../models/project.model");
 const columnModel = require("../models/column.model");
-const { BadRequestError, NotFoundError } = require("../core/error.response");
+const permissionModel = require("../models/permissions.model");
+const {
+  BadRequestError,
+  NotFoundError,
+  AuthFailureError,
+} = require("../core/error.response");
 const { convertToObjectIdMongose } = require("../utils/index");
 
 const { getAllProducts } = require("../models/repo/project.repo");
 class ProjectService {
-  GetProjects = async (page, size) => {
-    const projects = await getAllProducts(page, size);
+  ChangeRole = async (projectId, payload) => {
+    const holderPermission = await permissionModel.findOneAndUpdate(
+      {
+        projectId: projectId,
+        userId: payload.userId,
+      },
+      {
+        role: payload.role,
+      }
+    );
+
+    if (!holderPermission) throw new AuthFailureError("Can not change role");
+    return holderPermission;
+  };
+  GetProjects = async (userId, page, size) => {
+    const projects = await getAllProducts(userId, page, size);
     if (!projects) throw new BadRequestError("Error: Cant find prjects");
     return projects;
   };
@@ -15,6 +34,15 @@ class ProjectService {
     payload.owner = id;
     const createProject = await projectModel.create(payload);
     if (!createProject) throw new BadRequestError("Error: Cant create project");
+
+    const holderPermission = await permissionModel.create({
+      projectId: createProject._id,
+      userId: id,
+      role: "editor",
+    });
+
+    if (!holderPermission)
+      throw new "Something went wrong when create project"();
     return createProject;
   };
 
@@ -23,27 +51,25 @@ class ProjectService {
       _id: convertToObjectIdMongose(projectId),
     });
 
-    if (!holderProject)
-      throw new NotFoundError("Not found");
+    if (!holderProject) throw new NotFoundError("Not found");
 
     const updateProject = await projectModel.findByIdAndUpdate(
       convertToObjectIdMongose(projectId),
       payload,
       { new: true }
     );
-  
+
     if (!updateProject)
-      throw new BadRequestError("Error: Something went wrong cant updateProject");
+      throw new BadRequestError(
+        "Error: Something went wrong cant updateProject"
+      );
 
     return updateProject;
   };
 
   DeleteProject = async (projectId) => {
     const holderProject = await projectModel.findOne({ _id: projectId });
-    if (!holderProject)
-      throw new NotFoundError(
-        "Not found project"
-      );
+    if (!holderProject) throw new NotFoundError("Not found project");
 
     const ObjectColumnIds = holderProject.columnIds;
 

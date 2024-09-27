@@ -22,6 +22,10 @@ class AccessService {
     return "Message sent via socket";
   };
 
+  Upload = async (file) => {
+    return file;
+  };
+
   signUp = async ({ name, email, password }) => {
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");

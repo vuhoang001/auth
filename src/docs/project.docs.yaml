@@ -1,0 +1,153 @@
+paths:
+  /projects:
+    get:
+      summary: Retrieve a list of projects
+      tags: [Project]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: A list of projects
+        "500":
+          description: Server error
+    post:
+      summary: Create a project
+      tags: [Project]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectName:
+                  type: string
+                  description: The name of the project
+                projectDescription:
+                  type: string
+                  description: A brief description of the project
+                progressTask:
+                  type: number
+                  description: The progress of tasks as a percentage
+                columnIds:
+                  type: array
+                  items:
+                    type: string
+                    description: Array of column IDs associated with the project
+                fromDate:
+                  type: string
+                  format: date
+                  description: The day start the project
+                toDate:
+                  type: string
+                  format: date
+                  description: Expected project completion date
+                members:
+                  type: array
+                  items:
+                    type: string
+                    description: Members in the project
+              required:
+                - projectName
+                - projectDescription
+                - progressTask
+      responses:
+        "200":
+          description: Create success
+        "401":
+          description: Unauthorized
+        "500":
+          description: Can't create project
+
+  /projects/{projectId}:
+    patch:
+      summary: Edit the project
+      tags: [Project]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: ID of the project to be updated
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectName:
+                  type: string
+                  description: The name of the project
+                projectDescription:
+                  type: string
+                  description: The description of the project
+                progressTask:
+                  type: number
+                  description: The progress of the project
+                columnIds:
+                  type: array
+                  items:
+                    type: string
+                    description: Array of column IDs associated with the project
+                fromDate:
+                  type: string
+                  format: date
+                  description: The day that project is started
+                toDate:
+                  type: string
+                  format: date
+                  description: Expected project completion date
+                members:
+                  type: array
+                  items:
+                    type: string
+                    description: Members in the project
+      responses:
+        "200":
+          description: Update success
+        "400":
+          description: Not found project
+        "500":
+          description: Can't edit project
+
+    delete:
+      summary: Delete the project
+      tags: [Project]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: ID of the project to be deleted
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted successfully!
+        "400":
+          description: Not found
+
+    get:
+      summary: Get a project
+      tags: [Project]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: ID project to search
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Get project success
+        "400":
+          description: NotFoundError

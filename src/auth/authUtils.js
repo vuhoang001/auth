@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 
-const { AuthFailureError } = require("../core/error.response");
+const { AuthFailureError, BadRequestError } = require("../core/error.response");
 const AsyncHandle = require("../helpers/AsyncHandle");
 const { getAccountById } = require("../models/repo/account.repo");
-
+const projectModel = require("../models/project.model");
+const permissionModel = require("../models/permissions.model");
+const { Types } = require("mongoose");
 const HEADER = {
   API_KEY: "x-api-key",
   CLIENT_ID: "x-client-id",
@@ -67,7 +69,44 @@ const authentication = AsyncHandle(async (req, res, next) => {
   next();
 });
 
+const checkStatusProject = AsyncHandle(async (req, res, next) => {
+  const projectId = req.params.projectId;
+  const userId = req.user;
+  if (!projectId) throw new BadRequestError("Something went wrong!");
+
+  const holderProject = await projectModel.findById(projectId);
+
+  if (!holderProject) throw new BadRequestError("Not found any project");
+
+  if (holderProject.status == "public") {
+    next();
+  }
+
+  const conditionOwner = holderProject.owner.toString() == userId.UserId;
+  const conditionMembers = holderProject.members.includes(userId);
+
+  if (!conditionOwner && !conditionMembers) {
+    throw new AuthFailureError("Unauthorized");
+  }
+  next();
+});
+
+const checkPermission = AsyncHandle(async (req, res, next) => {
+  const user = req.user;
+
+  const pms = await permissionModel.findOne({
+    userId: user.UserId,
+  });
+
+  if (pms.role != "editor") {
+    throw new AuthFailureError("Unaithorized 2");
+  }
+  next();
+});
+
 module.exports = {
   createTokensPair,
   authentication,
+  checkStatusProject,
+  checkPermission,
 };

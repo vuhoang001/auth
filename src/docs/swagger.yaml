@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: Project management
+  version: 1.0.0
+  description: Document for myApi
+servers:
+  - url: "http://localhost:3000" #
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    refreshToken:
+      type: apiKey
+      in: header
+      name: x-rtoken-id
+      description: Client ID for authentication
+tags:
+  - name: Access
+    description: "User access management endpoints"
+  - name: Project
+    description: "Project access management endpoints"
+  - name: Columns
+    description: "Column access management endpoints"
+  - name: Tasks
+    description: "Tasks access management endpoints"
+  - name: SubTasks
+    description: "Sub task access management endpoints"
+  - name: Permissions
+    description: "Change Permission"
+paths: {} # Bắt đầu với một đối tượng rỗng

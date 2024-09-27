@@ -24,10 +24,6 @@ const accountSchema = new Schema(
       enum: ["active", "inactive"],
       default: "inactive",
     },
-    roles: {
-      type: Array,
-      default: [],
-    },
     thumbnail: {
       type: String,
       default: "",

@@ -8,6 +8,13 @@ class AccessController {
     }).send(res);
   };
 
+  Upload = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Upload",
+      metadata: await AccessService.Upload(req.file),
+    }).send(res);
+  };
+
   signUp = async (req, res, next) => {
     new SuccessResponse({
       message: "Register success!",

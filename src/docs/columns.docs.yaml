@@ -1,0 +1,150 @@
+paths:
+  /projects/{projectId}/columns:
+    get:
+      summary: Get all columns
+      tags: [Columns]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path # Đã thay đổi từ query sang path
+          required: true
+          description: ProjectId to get columns
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not found
+        "501":
+          description: Internal server error
+
+    post:
+      summary: Create a column
+      tags: [Columns]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId # Đã thay đổi từ id thành projectId
+          in: path
+          required: true
+          description: ProjectId to create columns
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titleColumn:
+                  type: string
+                  description: The title of the column
+                taskIds:
+                  type: array
+                  items:
+                    type: string
+                    description: This is the ID of tasks in the column
+      responses:
+        "200":
+          description: Created successfully
+        "400":
+          description: Not found
+        "501":
+          description: Internal server error
+
+  /projects/{projectId}/columns/{columnId}:
+    get:
+      summary: Get column by ID
+      tags: [Columns]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId # Đã thêm projectId vì cần để xác định dự án
+          in: path
+          required: true
+          description: ID of the project
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: ID of the column
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not found
+        "501":
+          description: Internal server error
+
+    patch:
+      summary: Edit column by ID
+      tags: [Columns]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId # Đã thêm projectId cho tính nhất quán
+          in: path
+          required: true
+          description: ID of the project
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: ID of the column
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titleColumn:
+                  type: string
+                  description: Name of the column
+                taskIds:
+                  type: array
+                  items:
+                    type: string
+                    description: A list of task IDs
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not found
+        "501":
+          description: Internal server error
+
+    delete:
+      summary: Delete column
+      tags: [Columns]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId # Đã thêm projectId cho tính nhất quán
+          in: path
+          required: true
+          description: ID of the project
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: ID of the column to be deleted
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not found
+        "501":
+          description: Internal server error

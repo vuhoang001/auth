@@ -5,7 +5,8 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const cors = require("cors");
-const setupSwagger = require("./configs/swagger");
+// const setupSwagger = require("./configs/swagger");
+const { setupSwagger } = require("./configs/init.docs");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -16,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Thiết lập Swagger
 setupSwagger(app);
-
 // Khởi tạo MongoDB
 require("./database/init.mongodb");
 
