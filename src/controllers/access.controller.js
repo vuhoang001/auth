@@ -1,6 +1,21 @@
 const { SuccessResponse } = require("../core/success.response");
 const AccessService = require("../services/access.service");
 class AccessController {
+  GetAllUser = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get all user",
+      metadata: await AccessService.GetAllUser(),
+    }).send(res);
+  };
+
+  GetUserById = async (req, res, next) => {
+    const UserId = req.params.UserId;
+    new SuccessResponse({
+      message: "Get user by Id",
+      metadata: await AccessService.GetUserById(UserId),
+    }).send(res);
+  };
+
   socket = async (req, res, next) => {
     new SuccessResponse({
       message: "Socket test",

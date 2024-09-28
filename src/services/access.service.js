@@ -15,6 +15,20 @@ const { sendMail } = require("../configs/nodemailer.config");
 const { getIo } = require("../configs/socket.config");
 
 class AccessService {
+  GetAllUser = async () => {
+    const holderAccount = await AccountModel.find().select("name email _id");
+    if (!holderAccount) throw new BadRequestError("Not found data");
+    return holderAccount;
+  };
+
+  GetUserById = async (UserId) => {
+    const holderAccount = await AccountModel.findOne({ _id: UserId }).select(
+      "name email _id"
+    );
+    if (!holderAccount) throw new BadRequestError("Not found data");
+    return holderAccount;
+  };
+
   socket = async () => {
     const io = getIo(); // Lấy đối tượng io
     const message = "hello client";
