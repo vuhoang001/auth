@@ -149,3 +149,15 @@ paths:
           description: Success
         "400":
           description: Not found
+
+  /GetMe:
+    get:
+      summary: Get my informatino
+      tags: [Access]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not found

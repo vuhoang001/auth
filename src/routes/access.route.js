@@ -23,6 +23,8 @@ router.post("/passwordReset", AsynHandle(AccessController.resetPassword));
 // Middleware for authentication
 router.use(authentication);
 
+router.use("/GetMe", AsynHandle(AccessController.GetMe));
+
 router.get("/GetAll", AsynHandle(AccessController.GetAllUser));
 
 router.get("/GetUser/:UserId", AsynHandle(AccessController.GetUserById));

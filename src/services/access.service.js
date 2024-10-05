@@ -15,6 +15,13 @@ const { sendMail } = require("../configs/nodemailer.config");
 const { getIo } = require("../configs/socket.config");
 
 class AccessService {
+  GetMe = async (idCilent) => {
+    const holderAccount = await AccountModel.findOne({ _id: idCilent }).select("-password -status");
+    if (!holderAccount) 
+      throw new BadRequestError("Cant found informatin")
+    return holderAccount
+  };
+
   GetAllUser = async () => {
     const holderAccount = await AccountModel.find().select("name email _id");
     if (!holderAccount) throw new BadRequestError("Not found data");

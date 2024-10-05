@@ -1,5 +1,5 @@
 paths:
-  /projects/{projectId}/columns/{columnId}/task:
+  /projects/{projectId}/columns/{columnId}/tasks:
     get:
       summary: Get all tasks
       tags: [Tasks]
@@ -23,42 +23,7 @@ paths:
                       type: string
         "400":
           description: Bad request
-        "501":
-          description: Internal server error
-
-  /projects/{projectId}/columns/{columnId}/task/{taskId}:
-    get:
-      summary: Get task by ID
-      tags: [Tasks]
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: projectId # Đã thêm projectId để xác định dự án
-          in: path
-          required: true
-          description: ID of the project
-          schema:
-            type: string
-        - name: columnId # Đã thêm columnId để xác định cột
-          in: path
-          required: true
-          description: ID of the column
-          schema:
-            type: string
-        - name: taskId
-          in: path
-          required: true
-          description: ID of the task
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Success
-        "400":
-          description: Bad request
-        "404":
-          description: Not found
-        "501":
+        "500":
           description: Internal server error
 
     post:
@@ -67,7 +32,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: projectId # Đã thêm projectId để xác định dự án
+        - name: projectId
           in: path
           required: true
           description: ID of the project
@@ -99,12 +64,10 @@ paths:
                 taskStatus:
                   type: string
                   enum:
-                    [
-                      "Công việc cần làm",
-                      "Đang tiến hành",
-                      "Kiểm tra",
-                      "Hoàn thành",
-                    ]
+                    - "Công việc cần làm"
+                    - "Đang tiến hành"
+                    - "Kiểm tra"
+                    - "Hoàn thành"
                   description: Status of the task
                 assignees:
                   type: array
@@ -119,7 +82,7 @@ paths:
                       user:
                         type: string
                         format: objectId
-                        description: User ID referencing for Account
+                        description: User ID referencing the Account
                       comment:
                         type: string
                         description: The comment text
@@ -132,8 +95,73 @@ paths:
                 - priority
                 - taskStatus
       responses:
-        "200":
+        "201":
           description: Success, returns the created task details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  priority:
+                    type: string
+                  status:
+                    type: string
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+        "500":
+          description: Internal server error
+
+  /projects/{projectId}/columns/{columnId}/tasks/{taskId}:
+    get:
+      summary: Get task by ID
+      tags: [Tasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: ID of the project
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: ID of the column
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          description: ID of the task
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  priority:
+                    type: string
+                  status:
+                    type: string
         "400":
           description: Bad request
         "404":
@@ -147,13 +175,13 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: projectId # Đã thêm projectId để xác định dự án
+        - name: projectId
           in: path
           required: true
           description: ID of the project
           schema:
             type: string
-        - name: columnId # Đã thêm columnId để xác định cột
+        - name: columnId
           in: path
           required: true
           description: ID of the column
@@ -185,13 +213,15 @@ paths:
                 taskStatus:
                   type: string
                   enum:
-                    [
-                      "Công việc cần làm",
-                      "Đang tiến hành",
-                      "Kiểm tra",
-                      "Hoàn thành",
-                    ]
+                    - "Công việc cần làm"
+                    - "Đang tiến hành"
+                    - "Kiểm tra"
+                    - "Hoàn thành"
                   description: Status of the task
+              required:
+                - taskName
+                - priority
+                - taskStatus
       responses:
         "200":
           description: Success
@@ -208,13 +238,13 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: projectId # Đã thêm projectId để xác định dự án
+        - name: projectId
           in: path
           required: true
           description: ID of the project
           schema:
             type: string
-        - name: columnId # Đã thêm columnId để xác định cột
+        - name: columnId
           in: path
           required: true
           description: ID of the column
