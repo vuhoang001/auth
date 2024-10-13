@@ -99,7 +99,6 @@ class TaskService {
   };
 
   CreateComment = async (taskId, payload) => {
-    console.log(payload)
     const holderTask = await taskModel.findOne({ _id: taskId });
     return holderTask
   };
@@ -127,7 +126,6 @@ class TaskService {
   };
 
   UpdateSubTask = async (payload, idSubTask) => {
-    console.log(payload);
     const update = await subTaskModel.updateOne(
       { _id: idSubTask },
       {

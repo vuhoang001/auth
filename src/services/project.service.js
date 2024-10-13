@@ -1,7 +1,7 @@
 const projectModel = require("../models/project.model");
 const columnModel = require("../models/column.model");
 const permissionModel = require("../models/permissions.model");
-const tempModel = require('../models/templateMail.model')
+const tempModel = require("../models/templateMail.model");
 const {
   BadRequestError,
   NotFoundError,
@@ -35,9 +35,9 @@ class ProjectService {
       _id: { $in: memberIds.map((id) => new mongoose.Types.ObjectId(id)) },
     });
 
-    const templateModel = await tempModel.findOne({objectCode: "AM"}) 
-    console.log(templateModel)
-    
+    const templateModel = await tempModel.findOne({ objectCode: "AM" });
+    console.log(templateModel);
+
     for (var i = 0; i < members.length; i++) {
       sendMail(members[i].email, link);
     }

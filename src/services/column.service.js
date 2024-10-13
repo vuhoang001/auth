@@ -1,7 +1,7 @@
 const columnModel = require("../models/column.model");
 const projectModel = require("../models/project.model");
 const { BadRequestError } = require("../core/error.response");
-const {convertToObjectIdMongose} = require('../utils/index')
+const { convertToObjectIdMongose } = require("../utils/index");
 class ColumnService {
   CreateColumn = async (payload, idProject) => {
     const holderProject = await projectModel.findOne({ _id: idProject });
@@ -22,13 +22,27 @@ class ColumnService {
   };
 
   GetAllColumns = async (projectId) => {
+    // const data = await projectModel
+    //   .findById(convertToObjectIdMongose(projectId))
+    //   .populate("columnIds")
+    //   .exec();
+    // if (!data) throw new BadRequestError("Error: Cant get all column");
+    // console.log(data);
+    // return data;
+
     const data = await projectModel
       .findById(convertToObjectIdMongose(projectId))
-      .populate("columnIds")
+      .populate({
+        path: "columnIds",
+        populate: {
+          path: "taskIds",
+          model: "Task",
+        },
+      })
       .exec();
-    if (!data) throw new BadRequestError("Error: Cant get all column");
-    return data.columnIds;
-    // return 1
+
+    if (!data) throw new BadRequestError("Error: Cant get all columns");
+    return data;
   };
 
   UpdateColumn = async (payload, idColumn) => {
