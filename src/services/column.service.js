@@ -22,14 +22,6 @@ class ColumnService {
   };
 
   GetAllColumns = async (projectId) => {
-    // const data = await projectModel
-    //   .findById(convertToObjectIdMongose(projectId))
-    //   .populate("columnIds")
-    //   .exec();
-    // if (!data) throw new BadRequestError("Error: Cant get all column");
-    // console.log(data);
-    // return data;
-
     const data = await projectModel
       .findById(convertToObjectIdMongose(projectId))
       .populate({
