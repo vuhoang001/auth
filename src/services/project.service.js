@@ -1,6 +1,7 @@
 const projectModel = require("../models/project.model");
 const columnModel = require("../models/column.model");
 const permissionModel = require("../models/permissions.model");
+const tempModel = require('../models/templateMail.model')
 const {
   BadRequestError,
   NotFoundError,
@@ -9,6 +10,9 @@ const {
 const { convertToObjectIdMongose } = require("../utils/index");
 
 const { getAllProducts } = require("../models/repo/project.repo");
+const { default: mongoose } = require("mongoose");
+const { sendMail } = require("../configs/nodemailer.config");
+const accountModel = require("../models/account.model");
 class ProjectService {
   ChangeRole = async (projectId, payload) => {
     const holderPermission = await permissionModel.findOneAndUpdate(
@@ -23,6 +27,24 @@ class ProjectService {
 
     if (!holderPermission) throw new AuthFailureError("Can not change role");
     return holderPermission;
+  };
+
+  AddMembersToProject = async (projectId, payload) => {
+    const { memberIds } = payload;
+    const members = await accountModel.find({
+      _id: { $in: memberIds.map((id) => new mongoose.Types.ObjectId(id)) },
+    });
+
+    const templateModel = await tempModel.findOne({objectCode: "AM"}) 
+    console.log(templateModel)
+    
+    for (var i = 0; i < members.length; i++) {
+      sendMail(members[i].email, link);
+    }
+    const holderProject = await projectModel.findOne({ _id: projectId });
+    if (!holderProject) throw new BadRequestError("Something went wrong");
+
+    return "Add member success";
   };
   GetProjects = async (userId, page, size) => {
     const projects = await getAllProducts(userId, page, size);

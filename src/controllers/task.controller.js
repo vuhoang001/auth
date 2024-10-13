@@ -95,6 +95,14 @@ class TaskController {
       metadata: await taskService.DeleteSubTask(subTaskId),
     }).send(res);
   };
+
+  CreateComment = async (req, res, next) => {
+    const taskId = req.params.taskId;
+    new SuccessResponse({
+      message: "Create comment",
+      metadata: await taskService.CreateComment(taskId, req.body),
+    }).send(res);
+  };
 }
 
 module.exports = new TaskController();

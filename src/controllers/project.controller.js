@@ -10,6 +10,13 @@ class ProjectController {
     }).send(res);
   };
 
+  AddMemberToProject = async (req, res, next) => {
+    const projectId = req.params.projectId;
+    new SuccessResponse({
+      message: "Add members to project",
+      metadata: await ProjectService.AddMembersToProject(projectId, req.body),
+    }).send(res);
+  };
   CreateProject = async (req, res, next) => {
     const userId = req.user.UserId;
     new SuccessResponse({

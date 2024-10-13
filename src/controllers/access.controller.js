@@ -81,7 +81,6 @@ class AccessController {
     const token = req.query.token;
     const email = req.query.email;
     const { password } = req.body;
-    console.log(token, email, password);
     new SuccessResponse({
       message: "Reset password success",
       metadata: await AccessService.resetPassword(password, token, email),

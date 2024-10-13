@@ -29,4 +29,6 @@ tags:
     description: "Sub task access management endpoints"
   - name: Permissions
     description: "Change Permission"
+  - name: Comment
+    description: "Comment management endpoints"
 paths: {} # Bắt đầu với một đối tượng rỗng

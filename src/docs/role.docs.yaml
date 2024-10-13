@@ -19,7 +19,6 @@ paths:
             schema:
               type: object
               properties:
-
                 role:
                   type: string
                   enum: ["viewer", "editor"]
@@ -46,3 +45,34 @@ paths:
           description: Unauthorized
         500:
           description: Internal server error
+
+  /projects/{projectId}/permission/add:
+    post:
+      summary: Send request to join the project
+      tags: [Permissions]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Id of project
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                memberIds:
+                  type: array
+                  items: 
+                    type: string  
+                    description: List of member ids  
+      responses:
+        200: 
+          description: success
+        400: 
+          description: Not found

@@ -16,10 +16,11 @@ const { getIo } = require("../configs/socket.config");
 
 class AccessService {
   GetMe = async (idCilent) => {
-    const holderAccount = await AccountModel.findOne({ _id: idCilent }).select("-password -status");
-    if (!holderAccount) 
-      throw new BadRequestError("Cant found informatin")
-    return holderAccount
+    const holderAccount = await AccountModel.findOne({ _id: idCilent }).select(
+      "-password -status"
+    );
+    if (!holderAccount) throw new BadRequestError("Cant found informatin");
+    return holderAccount;
   };
 
   GetAllUser = async () => {
@@ -195,13 +196,14 @@ class AccessService {
     });
 
     if (!forgetPassword) throw new BadRequestError("Error: Cant create OTP");
-    const link = `http://localhost:3000/v1/api/passwordReset?token=${resetToken}&email=${email}`;
+    const link = `http://localhost:3000/passwordReset?token=${resetToken}&email=${email}`;
     sendMail(email, link);
     return link;
   };
 
   resetPassword = async (password, resetToken, email) => {
     const passwordResetToken = await ForgetPasswordModel.findOne({ email });
+    console.log("resetToeknn", passwordResetToken);
     if (!passwordResetToken)
       throw new Error("Error: Invalid or expired password reset token");
 

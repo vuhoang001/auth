@@ -1,10 +1,23 @@
 paths:
-  /projects/{projectId}/columns/{columnId}/tasks:
+  /projects/{projectId}/columns/{columnId}/task:
     get:
       summary: Get all tasks
       tags: [Tasks]
       security:
         - bearerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          description: Id of project
+          required: true
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          description: Id of column
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Success
@@ -119,7 +132,7 @@ paths:
         "500":
           description: Internal server error
 
-  /projects/{projectId}/columns/{columnId}/tasks/{taskId}:
+  /projects/{projectId}/columns/{columnId}/task/{taskId}:
     get:
       summary: Get task by ID
       tags: [Tasks]
@@ -264,4 +277,60 @@ paths:
         "404":
           description: Task not found
         "500":
+          description: Internal server error
+
+  /projects/{projectId}/columns/{columnId}/task/{taskId}/comment:
+    post:
+      summary: Create comment
+      tags: [Comment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: columnId
+          in: path
+          required: true
+          description: Id of column
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          description: Id of task
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          required: true
+          schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  description: Comment of the task
+      responses:
+        201:
+          description: Create comment successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                  userId:
+                    type: string
+                  role:
+                    type: string
+        400:
+          description: Bad request (e.g., missing fields or invalid data)
+        404:
+          description: Project not found
+        401:
+          description: Not found comment
+        500:
           description: Internal server error

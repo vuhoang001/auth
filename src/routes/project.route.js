@@ -11,6 +11,7 @@ const {
   checkPermission,
 } = require("../auth/authUtils");
 const AsyncHandle = require("../helpers/AsyncHandle");
+const projectController = require("../controllers/project.controller");
 
 router.use(authentication);
 
@@ -112,6 +113,15 @@ router.delete(
   AsyncHandle(taskController.DeleteTask)
 );
 
+//Comment
+
+router.post(
+  "/:projectId/columns/:columnId/task/:taskId/comment",
+  checkStatusProject,
+  checkPermission,
+  AsyncHandle(taskController.CreateComment)
+);
+
 // SUBTASK
 router.get(
   "/:projectId/task/:taskId/subTask",
@@ -147,11 +157,18 @@ router.delete(
   AsyncHandle(taskController.DeleteSubTask)
 );
 
-router.patch(
+router.post(
   "/:projectId/permission",
   checkStatusProject,
   checkPermission,
-  AsyncHandle(taskController.DeleteSubTask)
+  AsyncHandle(projectController.Permission)
+);
+
+router.post(
+  "/:projectId/permission/add",
+  checkStatusProject,
+  checkPermission,
+  AsyncHandle(projectController.AddMemberToProject)
 );
 
 module.exports = router;
