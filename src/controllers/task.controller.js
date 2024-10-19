@@ -80,7 +80,6 @@ class TaskController {
   };
 
   UpdateSubTask = async (req, res, next) => {
-    // const idTask = req.params.idTask;
     const subTaskId = req.params.subTaskId;
     new SuccessResponse({
       message: "Update sub task",

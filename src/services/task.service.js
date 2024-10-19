@@ -98,10 +98,10 @@ class TaskService {
     return 1;
   };
 
-  CreateComment = async (taskId, payload) => {
-    const holderTask = await taskModel.findOne({ _id: taskId });
-    return holderTask
-  };
+  // CreateComment = async (taskId, payload) => {
+  //   const holderTask = await taskModel.findOne({ _id: taskId });
+  //   return holderTask
+  // };
 
   GetAllSubTask = async (idTask) => {
     const data = await subTaskModel.find({ taskId: idTask });

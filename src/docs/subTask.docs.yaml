@@ -6,7 +6,12 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: idTask
+        - name: projectId
+          in: path
+          description: ID of the project
+          schema:
+            type: string
+        - name: taskId
           in: path
           required: true
           description: ID of the task to which the subtask belongs
@@ -52,10 +57,15 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: idTask
+        - name: projectId
+          in: path
+          description: ID of the project
+          schema:
+            type: string
+        - name: taskId
           in: path
           required: true
-          description: ID of the task to which the subtasks belong
+          description: ID of the task to which the subtask belongs
           schema:
             type: string
       responses:
@@ -81,20 +91,24 @@ paths:
         500:
           description: Internal server error
 
-  projects/{projectId}/task/{taskId}/subTask/:subTaskId:
-    patch: 
+  projects/{projectId}/task/{taskId}/subTask/{subTaskId}:
+    patch:
       summary: Edit subtask
       tags: [SubTasks]
       security:
         - bearerAuth: []
       parameters:
-        - name: idTask
+        - name: projectId
+          in: path
+          required: true
+          description: Id of project
+        - name: taskId
           in: path
           required: true
           description: ID of task
           schema:
             type: string
-        - name: idSubTask
+        - name: subTaskId
           in: path
           required: true
           description: ID of subtask
@@ -110,7 +124,7 @@ paths:
                 subTaskName:
                   type: string
                   description: Name of the subtask
-                statusTask:
+                statusSubTask:
                   type: boolean
                   description: Status of the subtask
       responses:
@@ -140,9 +154,20 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: idSubTask
+        - name: projectId
           in: path
           required: true
+          description: Id of project
+        - name: taskId
+          in: path
+          required: true
+          description: ID of task
+          schema:
+            type: string
+        - name: subTaskId
+          in: path
+          required: true
+          description: ID of subtask
           schema:
             type: string
       responses:
@@ -172,9 +197,20 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: idSubTask
+        - name: projectId
           in: path
           required: true
+          description: Id of project
+        - name: taskId
+          in: path
+          required: true
+          description: ID of task
+          schema:
+            type: string
+        - name: subTaskId
+          in: path
+          required: true
+          description: ID of subtask
           schema:
             type: string
       responses:
