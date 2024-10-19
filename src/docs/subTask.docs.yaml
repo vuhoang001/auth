@@ -27,7 +27,7 @@ paths:
                 subTaskName:
                   type: string
                   description: Name of the subtask
-                statusTask:
+                statusSubTask:
                   type: boolean
                   description: Status of the subtask
       responses:
