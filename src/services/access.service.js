@@ -8,7 +8,6 @@ const { getInfoData } = require("../utils/index");
 const KeyTokenService = require("../services/keyToken.service");
 const {
   getAccountByEmail,
-  getAccountById,
 } = require("../models/repo/account.repo");
 const { sendMail } = require("../configs/nodemailer.config");
 
@@ -48,7 +47,7 @@ class AccessService {
     return file;
   };
 
-  signUp = async ({ name, email, password }) => {
+signUp = async ({ name, email, password }) => {
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");
 

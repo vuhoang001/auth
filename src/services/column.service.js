@@ -29,6 +29,10 @@ class ColumnService {
         populate: {
           path: "taskIds",
           model: "Task",
+          populate: {
+            path: 'subTaskIds', 
+            model: "SubTask"
+          }
         },
       })
       .exec();
