@@ -6,10 +6,9 @@ const crypto = require("crypto");
 const { createTokensPair } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index");
 const KeyTokenService = require("../services/keyToken.service");
-const {
-  getAccountByEmail,
-} = require("../models/repo/account.repo");
+const { getAccountByEmail } = require("../models/repo/account.repo");
 const { sendMail } = require("../configs/nodemailer.config");
+const { uploadImageFromLocalFiles } = require("../helpers/cloudinary");
 
 const { getIo } = require("../configs/socket.config");
 
@@ -20,6 +19,21 @@ class AccessService {
     );
     if (!holderAccount) throw new BadRequestError("Cant found informatin");
     return holderAccount;
+  };
+
+  UpdateGetMe = async (idClient, payload, files) => {
+    const holderAccount = await AccountModel.findOne({ _id: idClient });
+    if (!holderAccount) throw new BadRequestError("Cont found information ");
+
+    const image = await uploadImageFromLocalFiles(files);
+    if (image) {
+      console.log(image[0].thumb_url);
+      payload.thumbnail = image[0].thumb_url;
+    }
+    Object.assign(holderAccount, payload);
+    const data = await holderAccount.save();
+    if (!data) throw new BadRequestError("Can not edit get me");
+    return "Success";
   };
 
   GetAllUser = async () => {
@@ -47,7 +61,7 @@ class AccessService {
     return file;
   };
 
-signUp = async ({ name, email, password }) => {
+  signUp = async ({ name, email, password }) => {
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");
 

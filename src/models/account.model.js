@@ -28,6 +28,12 @@ const accountSchema = new Schema(
       type: String,
       default: "",
     },
+    phone: {
+      type: Number,
+    },
+    address: {
+      type: String,
+    },
   },
   {
     timestamps: true,

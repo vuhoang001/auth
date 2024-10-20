@@ -161,3 +161,30 @@ paths:
           description: Success
         "400":
           description: Not found
+    patch:
+      summary: Edit Information
+      tags: [Access]
+      security:
+        - bearerAuth: []
+      description: Edit information of me
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+      responses:
+        200:
+          description: Edit successful
+        401:
+          description: Error

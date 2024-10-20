@@ -3,14 +3,9 @@ const router = express.Router();
 const AsynHandle = require("../helpers/AsyncHandle");
 const AccessController = require("../controllers/access.controller");
 const { authentication } = require("../auth/authUtils");
-const upload = require("../configs/multer.config");
+const { uploadDisk } = require("../configs/multer.config");
 
 router.get("/socket", AsynHandle(AccessController.socket));
-router.post(
-  "/upload",
-  upload.single("file"),
-  AsynHandle(AccessController.Upload)
-);
 
 router.post("/signup", AsynHandle(AccessController.signUp));
 
@@ -23,7 +18,13 @@ router.post("/passwordReset", AsynHandle(AccessController.resetPassword));
 // Middleware for authentication
 router.use(authentication);
 
-router.use("/GetMe", AsynHandle(AccessController.GetMe));
+router.get("/GetMe", AsynHandle(AccessController.GetMe));
+
+router.patch(
+  "/GetMe",
+  uploadDisk.array("files", 1),
+  AsynHandle(AccessController.EditGetMe)
+);
 
 router.get("/GetAll", AsynHandle(AccessController.GetAllUser));
 

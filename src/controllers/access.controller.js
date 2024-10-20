@@ -8,6 +8,18 @@ class AccessController {
     }).send(res);
   };
 
+  EditGetMe = async (req, res, next) => {
+    const { files } = req;
+    new SuccessResponse({
+      message: "Edit success",
+      metadata: await AccessService.UpdateGetMe(
+        req.user.UserId,
+        req.body,
+        files
+      ),
+    }).send(res);
+  };
+
   GetAllUser = async (req, res, next) => {
     new SuccessResponse({
       message: "Get all user",
@@ -60,7 +72,6 @@ class AccessController {
   };
 
   handleRefreshToken = async (req, res, next) => {
-    console.log("req.user", req.user);
     const user = req.user;
     const refreshToken = req.refreshToken;
     new SuccessResponse({
