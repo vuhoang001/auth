@@ -47,9 +47,14 @@ class TaskService {
     const match = holderProject.columnIds.includes(columnId);
     if (!match) throw new BadRequestError("Can not get taks by id 2");
 
-    const data = await columnModel
-      .findOne({ _id: columnId })
-      .populate("taskIds");
+    const data = await columnModel.findOne({ _id: columnId }).populate({
+      path: "taskIds",
+      populate: {
+        path: "comments.user",
+        model: "Account",
+        select: "_id email thumbnail name address",
+      },
+    });
 
     const founded = data.taskIds.find((task) => task._id.toString() === taskId);
     if (!founded) throw new BadRequestError("Task not found");
@@ -98,19 +103,19 @@ class TaskService {
     return 1;
   };
 
-  CreateComment = async (taskId, payload) => {
+  CreateComment = async (taskId, payload, IdUser) => {
     const holderTask = await taskModel.findOne({ _id: taskId });
     if (!holderTask)
       throw new BadRequestError("Something went wrong cant add comment");
 
     holderTask.comments.push({
-      user: payload.userId,
+      user: IdUser,
       comment: payload.comment,
     });
 
-    const res = await holderTask.save()
- 
-    if(!res) throw new BadRequestError("Something went wrong")
+    const res = await holderTask.save();
+
+    if (!res) throw new BadRequestError("Something went wrong");
     return res;
   };
 

@@ -97,9 +97,10 @@ class TaskController {
 
   CreateComment = async (req, res, next) => {
     const taskId = req.params.taskId;
+    const IdUser = req.user.UserId;
     new SuccessResponse({
       message: "Create comment",
-      metadata: await taskService.CreateComment(taskId, req.body),
+      metadata: await taskService.CreateComment(taskId, req.body, IdUser),
     }).send(res);
   };
 }
