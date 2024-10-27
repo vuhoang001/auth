@@ -320,12 +320,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  projectId:
-                    type: string
                   userId:
                     type: string
-                  role:
+                  comment: 
                     type: string
+                  
         400:
           description: Bad request (e.g., missing fields or invalid data)
         404:

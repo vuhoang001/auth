@@ -1,28 +1,17 @@
 paths:
-  /projects/{projectId}/columns/{columnId}/task/{taskId}/comment:
+  /comment:
     post:
       summary: Create comment
-      tags: [Comment]
+      tags: [Comments]
       security:
         - bearerAuth: []
       parameters:
-        - name: columnId
-          in: path
-          required: true
-          description: Id of column
-          schema:
-            type: string
         - name: taskId
           in: path
           required: true
           description: Id of task
           schema:
             type: string
-        - name: projectId
-          in: path
-          required: true
-          schema:
-          type: string
       requestBody:
         required: true
         content:

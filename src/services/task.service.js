@@ -98,10 +98,21 @@ class TaskService {
     return 1;
   };
 
-  // CreateComment = async (taskId, payload) => {
-  //   const holderTask = await taskModel.findOne({ _id: taskId });
-  //   return holderTask
-  // };
+  CreateComment = async (taskId, payload) => {
+    const holderTask = await taskModel.findOne({ _id: taskId });
+    if (!holderTask)
+      throw new BadRequestError("Something went wrong cant add comment");
+
+    holderTask.comments.push({
+      user: payload.userId,
+      comment: payload.comment,
+    });
+
+    const res = await holderTask.save()
+ 
+    if(!res) throw new BadRequestError("Something went wrong")
+    return res;
+  };
 
   GetAllSubTask = async (idTask) => {
     const data = await subTaskModel.find({ taskId: idTask });
