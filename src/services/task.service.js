@@ -119,6 +119,25 @@ class TaskService {
     return res;
   };
 
+  DeleteComment = async (taskId, commentId, UserId) => {
+    const task = await taskModel.findOne({ _id: taskId });
+    if (!task) throw new BadRequestError("Task not found");
+
+    const commentIndex = task.comments.findIndex(
+      (comment) =>
+        comment._id.toString() === commentId &&
+        comment.user.toString() === UserId
+    );
+
+    if (commentIndex === -1)
+      throw new BadRequestError("Comment not found or unthorized");
+
+    task.comments.splice(commentIndex, 1);
+
+    await task.save();
+    return 1;
+  };
+
   GetAllSubTask = async (idTask) => {
     const data = await subTaskModel.find({ taskId: idTask });
 

@@ -122,6 +122,13 @@ router.post(
   AsyncHandle(taskController.CreateComment)
 );
 
+router.delete(
+  "/:projectId/columns/:columnId/task/:taskId/comment/:commentId",
+  checkStatusProject,
+  checkPermission,
+  AsyncHandle(taskController.DeleteComment)
+);
+
 // SUBTASK
 router.get(
   "/:projectId/task/:taskId/subTask",
