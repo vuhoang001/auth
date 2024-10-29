@@ -103,6 +103,16 @@ class TaskController {
       metadata: await taskService.CreateComment(taskId, req.body, IdUser),
     }).send(res);
   };
+
+  DeleteComment = async (req, res, next) => {
+    const taskId = req.params.taskId;
+    const IdUser = req.user.UserId;
+    const commentId = req.params.commentId;
+    new SuccessResponse({
+      message: "Delete comment success!",
+      metadata: await taskService.DeleteComment(taskId, commentId, IdUser),
+    }).send(res);
+  };
 }
 
 module.exports = new TaskController();

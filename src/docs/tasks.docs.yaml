@@ -322,9 +322,56 @@ paths:
                 properties:
                   userId:
                     type: string
-                  comment: 
+                  comment:
                     type: string
-                  
+
+        400:
+          description: Bad request (e.g., missing fields or invalid data)
+        404:
+          description: Project not found
+        401:
+          description: Not found comment
+        500:
+          description: Internal server error
+  /projects/{projectId}/columns/{columnId}/task/{taskId}/comment/{commentId}:
+    delete:
+      summary: Delete comment
+      tags: [Comment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: columnId
+          in: path
+          description: Id of column
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          description: Id of task
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          schema:
+            type: string
+        - name: commentId
+          description: Id of comment
+          in: path
+          schema:
+            type: string
+      responses:
+        201:
+          description: Create comment successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                  comment:
+                    type: string
+
         400:
           description: Bad request (e.g., missing fields or invalid data)
         404:
