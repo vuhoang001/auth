@@ -7,6 +7,10 @@ exports.getNotifications = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
 
     const notifications = await Notification.find({ projectId })
+      .populate({
+        path: 'user',
+        select: 'name thumbnail phone address email'
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
@@ -59,3 +63,4 @@ exports.markAllAsRead = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
