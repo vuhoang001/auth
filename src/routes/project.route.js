@@ -174,7 +174,7 @@ router.post(
 
 // NOTI
 router.get(
-  "/:projectId/notification/getall",
+  "/:projectId/notifications",
   checkStatusProject,
   checkPermission,
   AsyncHandle(notiController.getNotifications)
