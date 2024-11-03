@@ -19,6 +19,13 @@ const projectSchema = new Schema(
       default: [],
     },
     owner: Schema.Types.ObjectId,
+
+    // Trạng thái dự án
+    statusProject: {
+      type: String,
+      enum: ["Khởi động dự án", "Đang tiến hành", "Đang treo", "Đã hủy", "Hoàn thành"],
+      default: "Khởi động dự án"
+    },
     status: {
       type: String,
       enum: ["public", "private"],
