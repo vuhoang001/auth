@@ -17,6 +17,14 @@ class ProjectController {
       metadata: await ProjectService.AddMembersToProject(projectId, req.body),
     }).send(res);
   };
+
+  AcceptToProject = async (req, res, next) => {
+    const link = req.params.link 
+    new SuccessResponse({
+      message: "Add to project success", 
+      metadata: await ProjectService.AcceptedToProject(link)
+    }).send(res)
+  }
   CreateProject = async (req, res, next) => {
     const userId = req.user.UserId;
     new SuccessResponse({

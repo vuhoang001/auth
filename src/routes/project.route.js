@@ -172,7 +172,7 @@ router.post(
 );
 
 router.post(
-  "/:projectId/permission/add",
+  "/:projectId/addProject",
   checkStatusProject,
   checkPermission,
   AsyncHandle(projectController.AddMemberToProject)
@@ -186,4 +186,6 @@ router.get(
   checkPermission,
   AsyncHandle(notiController.getNotifications)
 );
+router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
+
 module.exports = router;
