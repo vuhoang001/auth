@@ -30,6 +30,8 @@ router.get("/GetAll", AsynHandle(AccessController.GetAllUser));
 
 router.get("/GetUser/:UserId", AsynHandle(AccessController.GetUserById));
 
+router.get("/GetByKey/:keyword", AsynHandle(AccessController.GetUserByKeyword));
+
 router.post("/logout", AsynHandle(AccessController.logout));
 
 router.post("/handle-refresh", AsynHandle(AccessController.handleRefreshToken));

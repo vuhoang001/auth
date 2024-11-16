@@ -35,6 +35,14 @@ class AccessController {
     }).send(res);
   };
 
+  GetUserByKeyword = async (req, res, next) => {
+    const keyword = req.params.keyword;
+    new SuccessResponse({
+      message: "Get user by keyword",
+      metadata: await AccessService.GetUserByKeyword(keyword),
+    }).send(res);
+  };
+
   socket = async (req, res, next) => {
     new SuccessResponse({
       message: "Socket test",
