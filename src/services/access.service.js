@@ -22,6 +22,17 @@ class AccessService {
   };
 
   GetUserByKeyword = async (keyword) => {
+    const holderAccount = await AccountModel.find({
+      $or: [{ name: keyword }, { email: keyword }],
+    }).select("-password -status");
+
+    if (holderAccount.length == 0)
+      throw new BadRequestError("Record not found");
+
+    return holderAccount;
+  };
+
+  GetUserByKeyword = async (keyword) => {
     keyword = new RegExp(keyword, "i");
     const holderAccount = await AccountModel.find({
       $or: [{ name: keyword }, { email: keyword }],
