@@ -69,6 +69,15 @@ class ProjectService {
       throw new BadRequestError("Something went wrong");
     }
 
+    const res2 = await permissionModel.create({
+      projectId: result[0],
+      userId: result[1],
+    });
+
+    if (!res2) {
+      return BadRequestError("Somethign went wrong");
+    }
+
     return "Success!";
   };
 

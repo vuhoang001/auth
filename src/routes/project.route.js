@@ -36,7 +36,7 @@ router.delete(
 router.get(
   "/:projectId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(ProjectController.GetProject)
 );
 
