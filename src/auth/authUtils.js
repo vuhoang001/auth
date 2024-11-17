@@ -74,7 +74,7 @@ const checkStatusProject = AsyncHandle(async (req, res, next) => {
   const userId = req.user;
   if (!projectId) throw new BadRequestError("Something went wrong!");
 
-  const holderProject = await projectModel.findById(projectId);
+  const holderProject = await projectModel.findById(projectId).lean();
 
   if (!holderProject) throw new BadRequestError("Not found any project");
 
@@ -82,8 +82,14 @@ const checkStatusProject = AsyncHandle(async (req, res, next) => {
     next();
   }
 
-  const conditionOwner = holderProject.owner.toString() == userId.UserId;
-  const conditionMembers = holderProject.members.includes(userId);
+  const isMember = holderProject.members
+    .map((item) => item.toString())
+    .includes(userId.UserId);
+
+  const isMember2 = holderProject.owner.toString() == userId.UserId;
+
+  const conditionOwner = isMember;
+  const conditionMembers = isMember2;
 
   if (!conditionOwner && !conditionMembers) {
     throw new AuthFailureError("Unauthorized");
@@ -97,6 +103,8 @@ const checkPermission = AsyncHandle(async (req, res, next) => {
   const pms = await permissionModel.findOne({
     userId: user.UserId,
   });
+
+  console.log(pms);
 
   if (pms.role != "editor") {
     throw new AuthFailureError("Unaithorized 2");
