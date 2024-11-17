@@ -13,6 +13,7 @@ const {
 const AsyncHandle = require("../helpers/AsyncHandle");
 const projectController = require("../controllers/project.controller");
 
+router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 router.use(authentication);
 
 router.post("/", AsyncHandle(ProjectController.CreateProject));

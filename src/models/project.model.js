@@ -17,6 +17,11 @@ const projectSchema = new Schema(
     members: {
       type: [Schema.Types.ObjectId],
       default: [],
+      ref: "Account",
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "Account",
     },
     owner: Schema.Types.ObjectId,
 
