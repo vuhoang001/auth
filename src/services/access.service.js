@@ -73,14 +73,14 @@ class AccessService {
     return file;
   };
 
-  signUp = async ({ name, email, password }) => {
+  signUp = async ({ username, email, password }) => {
     const holderAccount = await AccountModel.findOne({ email });
     if (holderAccount) throw new BadRequestError("Error: Account is registed");
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAccount = await AccountModel.create({
-      name,
+      name: username,
       password: hashedPassword,
       email,
     });
