@@ -133,7 +133,11 @@ class ProjectService {
   };
 
   GetProjectById = async (projectId) => {
-    const data = await projectModel.findOne({ _id: projectId });
+    const data = await projectModel
+      .findOne({ _id: projectId })
+      .populate("members")
+      .populate("owner");
+
     if (!data)
       throw new NotFoundError("Error: Something went wrong! Can get project");
     return data;

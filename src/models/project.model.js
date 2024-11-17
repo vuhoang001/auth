@@ -17,8 +17,12 @@ const projectSchema = new Schema(
     members: {
       type: [Schema.Types.ObjectId],
       default: [],
+      ref: "Account",
     },
-    owner: Schema.Types.ObjectId,
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "Account",
+    },
     status: {
       type: String,
       enum: ["public", "private"],
