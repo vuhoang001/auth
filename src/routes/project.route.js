@@ -12,6 +12,10 @@ const {
 } = require("../auth/authUtils");
 const AsyncHandle = require("../helpers/AsyncHandle");
 const projectController = require("../controllers/project.controller");
+const PERMISSION = {
+  VIEWER: "viewer",
+  EDITOR: "editor",
+};
 
 router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 router.use(authentication);
@@ -22,14 +26,14 @@ router.get("/", AsynHandle(ProjectController.GetAllProjects));
 router.patch(
   "/:projectId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsynHandle(ProjectController.UpdateProject)
 );
 
 router.delete(
   "/:projectId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsynHandle(ProjectController.DeleteProject)
 );
 
@@ -45,35 +49,35 @@ router.get(
 router.get(
   "/:projectId/columns",
   checkStatusProject,
-  checkPermission,
+  // checkPermission([PERMISSION.VIEWER, PERMISSION.EDITOR]),
   AsyncHandle(columnController.GetAllColumn)
 );
 
 router.get(
   "/:projectId/columns/:columnId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(columnController.GetColumn)
 );
 
 router.post(
   "/:projectId/columns",
   checkStatusProject,
-  checkPermission,
+  // checkPermission([PERMISSION.EDITOR]),
   AsyncHandle(columnController.CreateColumn)
 );
 
 router.patch(
   "/:projectId/columns/:columnId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(columnController.UpdateColumn)
 );
 
 router.delete(
   "/:projectId/columns/:columnId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(columnController.DeleteColumn)
 );
 
@@ -82,35 +86,35 @@ router.delete(
 router.get(
   "/:projectId/columns/:columnId/task",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.GetAllTasks)
 );
 
 router.get(
   "/:projectId/columns/:columnId/task/:taskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.GetTaskById)
 );
 
 router.post(
   "/:projectId/columns/:columnId/task",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.CreateTask)
 );
 
 router.patch(
   "/:projectId/columns/:columnId/task/:taskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.UpdateTask)
 );
 
 router.delete(
   "/:projectId/columns/:columnId/task/:taskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.DeleteTask)
 );
 
@@ -119,14 +123,14 @@ router.delete(
 router.post(
   "/:projectId/columns/:columnId/task/:taskId/comment",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.CreateComment)
 );
 
 router.delete(
   "/:projectId/columns/:columnId/task/:taskId/comment/:commentId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.DeleteComment)
 );
 
@@ -134,48 +138,48 @@ router.delete(
 router.get(
   "/:projectId/task/:taskId/subTask",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.GetAllSubTask)
 );
 
 router.get(
   "/:projectId/task/:taskId/subTask/:subTaskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.GetSubTask)
 );
 
 router.post(
   "/:projectId/task/:taskId/subTask",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.CreateSubTask)
 );
 
 router.patch(
   "/:projectId/task/:taskId/subTask/:subTaskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.UpdateSubTask)
 );
 router.delete(
   "/:projectId/task/:taskId/subTask/:subTaskId",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(taskController.DeleteSubTask)
 );
 
 router.post(
   "/:projectId/permission",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(projectController.Permission)
 );
 
 router.post(
   "/:projectId/addProject",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(projectController.AddMemberToProject)
 );
 
