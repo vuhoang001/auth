@@ -86,183 +86,185 @@ class AccessService {
   };
 
   signUp = async ({ username, email, password }) => {
-    const holderAccount = await AccountModel.findOne({ email });
-    if (holderAccount) throw new BadRequestError("Error: Account is registed");
+    signUp = async ({ username, email, password }) => {
+      const holderAccount = await AccountModel.findOne({ email });
+      if (holderAccount) throw new BadRequestError("Error: Account is registed");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newAccount = await AccountModel.create({
-      name: username,
-      password: hashedPassword,
-      email,
-    });
+      const newAccount = await AccountModel.create({
+        name: username,
+        name: username,
+        password: hashedPassword,
+        email,
+      });
 
-    if (!newAccount)
-      throw new BadRequestError(
-        "Error: Something went wrong! Cant create account"
+      if (!newAccount)
+        throw new BadRequestError(
+          "Error: Something went wrong! Cant create account"
+        );
+
+      // const tokens = await createTokensPair({
+      //   UserId: newAccount._id,
+      //   email,
+      // });
+      // if (!tokens) throw new BadRequestError("Error: Cant create tokens");
+
+      // const keyStore = await KeyTokenService.createKeys({
+      //   user: newAccount,
+      //   refreshToken: tokens.refreshToken,
+      // });
+
+      // if (!keyStore)
+      //   throw new BadRequestError("Error: can not create or update KeyStore");
+      return {
+        user: getInfoData({
+          fields: ["_id", "name", "email"],
+          object: newAccount,
+        }),
+        // accessToken: tokens.accessToken,
+        // refreshToken: tokens.refreshToken,
+      };
+    };
+
+    login = async ({ username, password }) => {
+      const foundAccount = await AccountModel.findOne({ email: username });
+
+      if (!foundAccount)
+        throw new AuthFailureError("Error: Account is not registed!");
+
+      const match = await bcrypt.compare(password, foundAccount.password);
+      if (!match)
+        throw new AuthFailureError("Error: Email or password is wrong!");
+
+      const tokens = await createTokensPair({
+        UserId: foundAccount._id,
+        email: foundAccount.email,
+      });
+
+      if (!tokens) throw new BadRequestError("Error: Can not create tokens");
+
+      const keyStore = await KeyTokenService.createKeys({
+        user: foundAccount,
+        refreshToken: tokens.refreshToken,
+      });
+
+      if (!keyStore)
+        throw new BadRequestError("Error: can not create or update KeyStore");
+      return {
+        user: getInfoData({
+          fields: ["_id", "name", "email"],
+          object: foundAccount,
+        }),
+        accessToken: tokens.accessToken,
+        atokenExp: tokens.atokenExp,
+        refreshToken: tokens.refreshToken,
+        rtokenExp: tokens.rtokenExp,
+      };
+    };
+
+    logout = async (user) => {
+      const userId = user.UserId;
+      const res = await KeyTokenService.removeKeyTokenByUserId(userId);
+      return res;
+    };
+
+    handleRefreshToken = async (user, refreshToken) => {
+      const userId = user.UserId;
+      const email = user.email;
+      const keyStore = await KeyTokenService.findKeyTokenByRefreshToken(
+        refreshToken
+      );
+      if (!keyStore) throw new BadRequestError("Unauthorcation");
+
+      if (keyStore.refreshTokenUsed.includes(refreshToken)) {
+        await KeyTokenService.removeKeyTokenByUserId(userId);
+        throw new AuthFailureError("Error: Something went wrong! Please relogin");
+      }
+
+      const foundUser = await getAccountByEmail(email);
+      if (!foundUser) throw new BadRequestError("Error: Cant found account");
+
+      const tokens = await createTokensPair({
+        UserId: foundUser._id,
+        email,
+      });
+
+      if (!tokens) throw new BadRequestError("Error: Cant create tokens");
+
+      const holderTokens = await KeyTokenService.findKeyTokenByUserId(
+        foundUser._id
+      );
+      if (!holderTokens)
+        throw new BadRequestError("Error: Cant not found Tokens");
+
+      const res = await holderTokens.updateOne({
+        $set: {
+          refreshToken: tokens.refreshToken,
+        },
+        $addToSet: {
+          refreshTokenUsed: refreshToken,
+        },
+      });
+
+      if (!res) throw new BadRequestError("Error: Cant set or update res");
+      return {
+        user: {
+          userId,
+          email,
+        },
+        accessToken: tokens.accessToken,
+        atokenExp: tokens.atokenExp,
+        refreshToken: tokens.refreshToken,
+        rtokenExp: tokens.rtokenExp,
+      };
+    };
+
+    handleOTP = async (email) => {
+      const holderUser = await getAccountByEmail(email);
+      if (!holderUser) throw new AuthFailureError("Error: Invalid email");
+
+      const resetToken = crypto.randomBytes(64).toString("hex");
+
+      const hash = await bcrypt.hash(resetToken, 10);
+
+      const forgetPassword = await ForgetPasswordModel.create({
+        email: email,
+        token: hash,
+        expireAt: Date.now(),
+      });
+
+      if (!forgetPassword) throw new BadRequestError("Error: Cant create OTP");
+      const link = `http://localhost:3000/passwordReset?token=${resetToken}&email=${email}`;
+      sendMail(email, link);
+      return link;
+    };
+
+    resetPassword = async (password, resetToken, email) => {
+      const passwordResetToken = await ForgetPasswordModel.findOne({ email });
+      console.log("resetToeknn", passwordResetToken);
+      if (!passwordResetToken)
+        throw new Error("Error: Invalid or expired password reset token");
+
+      const isValid = await bcrypt.compare(resetToken, passwordResetToken.token);
+
+      if (!isValid)
+        throw new Error("Error: Invalid or expired password reset token2");
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const holderAccount = await AccountModel.updateOne(
+        { email },
+        {
+          $set: { password: hashedPassword },
+        },
+        { new: true }
       );
 
-    // const tokens = await createTokensPair({
-    //   UserId: newAccount._id,
-    //   email,
-    // });
-    // if (!tokens) throw new BadRequestError("Error: Cant create tokens");
-
-    // const keyStore = await KeyTokenService.createKeys({
-    //   user: newAccount,
-    //   refreshToken: tokens.refreshToken,
-    // });
-
-    // if (!keyStore)
-    //   throw new BadRequestError("Error: can not create or update KeyStore");
-    return {
-      user: getInfoData({
-        fields: ["_id", "name", "email"],
-        object: newAccount,
-      }),
-      // accessToken: tokens.accessToken,
-      // refreshToken: tokens.refreshToken,
+      return {
+        holderAccount,
+      };
     };
-  };
-
-  login = async ({ username, password }) => {
-    const foundAccount = await AccountModel.findOne({ email: username });
-
-    if (!foundAccount)
-      throw new AuthFailureError("Error: Account is not registed!");
-
-    const match = await bcrypt.compare(password, foundAccount.password);
-    if (!match)
-      throw new AuthFailureError("Error: Email or password is wrong!");
-
-    const tokens = await createTokensPair({
-      UserId: foundAccount._id,
-      email: foundAccount.email,
-    });
-
-    if (!tokens) throw new BadRequestError("Error: Can not create tokens");
-
-    const keyStore = await KeyTokenService.createKeys({
-      user: foundAccount,
-      refreshToken: tokens.refreshToken,
-    });
-
-    if (!keyStore)
-      throw new BadRequestError("Error: can not create or update KeyStore");
-    return {
-      user: getInfoData({
-        fields: ["_id", "name", "email"],
-        object: foundAccount,
-      }),
-      accessToken: tokens.accessToken,
-      atokenExp: tokens.atokenExp,
-      refreshToken: tokens.refreshToken,
-      rtokenExp: tokens.rtokenExp,
-    };
-  };
-
-  logout = async (user) => {
-    const userId = user.UserId;
-    const res = await KeyTokenService.removeKeyTokenByUserId(userId);
-    return res;
-  };
-
-  handleRefreshToken = async (user, refreshToken) => {
-    const userId = user.UserId;
-    const email = user.email;
-    const keyStore = await KeyTokenService.findKeyTokenByRefreshToken(
-      refreshToken
-    );
-    if (!keyStore) throw new BadRequestError("Unauthorcation");
-
-    if (keyStore.refreshTokenUsed.includes(refreshToken)) {
-      await KeyTokenService.removeKeyTokenByUserId(userId);
-      throw new AuthFailureError("Error: Something went wrong! Please relogin");
-    }
-
-    const foundUser = await getAccountByEmail(email);
-    if (!foundUser) throw new BadRequestError("Error: Cant found account");
-
-    const tokens = await createTokensPair({
-      UserId: foundUser._id,
-      email,
-    });
-
-    if (!tokens) throw new BadRequestError("Error: Cant create tokens");
-
-    const holderTokens = await KeyTokenService.findKeyTokenByUserId(
-      foundUser._id
-    );
-    if (!holderTokens)
-      throw new BadRequestError("Error: Cant not found Tokens");
-
-    const res = await holderTokens.updateOne({
-      $set: {
-        refreshToken: tokens.refreshToken,
-      },
-      $addToSet: {
-        refreshTokenUsed: refreshToken,
-      },
-    });
-
-    if (!res) throw new BadRequestError("Error: Cant set or update res");
-    return {
-      user: {
-        userId,
-        email,
-      },
-      accessToken: tokens.accessToken,
-      atokenExp: tokens.atokenExp,
-      refreshToken: tokens.refreshToken,
-      rtokenExp: tokens.rtokenExp,
-    };
-  };
-
-  handleOTP = async (email) => {
-    const holderUser = await getAccountByEmail(email);
-    if (!holderUser) throw new AuthFailureError("Error: Invalid email");
-
-    const resetToken = crypto.randomBytes(64).toString("hex");
-
-    const hash = await bcrypt.hash(resetToken, 10);
-
-    const forgetPassword = await ForgetPasswordModel.create({
-      email: email,
-      token: hash,
-      expireAt: Date.now(),
-    });
-
-    if (!forgetPassword) throw new BadRequestError("Error: Cant create OTP");
-    const link = `http://localhost:3000/passwordReset?token=${resetToken}&email=${email}`;
-    sendMail(email, link);
-    return link;
-  };
-
-  resetPassword = async (password, resetToken, email) => {
-    const passwordResetToken = await ForgetPasswordModel.findOne({ email });
-    console.log("resetToeknn", passwordResetToken);
-    if (!passwordResetToken)
-      throw new Error("Error: Invalid or expired password reset token");
-
-    const isValid = await bcrypt.compare(resetToken, passwordResetToken.token);
-
-    if (!isValid)
-      throw new Error("Error: Invalid or expired password reset token2");
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const holderAccount = await AccountModel.updateOne(
-      { email },
-      {
-        $set: { password: hashedPassword },
-      },
-      { new: true }
-    );
-
-    return {
-      holderAccount,
-    };
-  };
-}
+  }
 
 module.exports = new AccessService();

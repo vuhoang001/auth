@@ -10,7 +10,6 @@ const {
 const { convertToObjectIdMongose } = require("../utils/index");
 
 const { getAllProducts } = require("../models/repo/project.repo");
-const { default: mongoose } = require("mongoose");
 const { sendMail } = require("../configs/nodemailer.config");
 const accountModel = require("../models/account.model");
 class ProjectService {

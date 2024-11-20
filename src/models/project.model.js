@@ -22,6 +22,11 @@ const projectSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "Account",
+      ref: "Account",
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "Account",
     },
     owner: Schema.Types.ObjectId,
 
