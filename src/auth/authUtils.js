@@ -97,20 +97,19 @@ const checkStatusProject = AsyncHandle(async (req, res, next) => {
   next();
 });
 
-const checkPermission = AsyncHandle(async (req, res, next) => {
-  const user = req.user;
+const checkPermission = (roles) =>
+  AsyncHandle(async (req, res, next) => {
+    const user = req.user;
 
-  const pms = await permissionModel.findOne({
-    userId: user.UserId,
+    const pms = await permissionModel.findOne({
+      userId: user.UserId,
+    });
+
+    if (!roles.includes(pms.role)) {
+      throw new AuthFailureError("Unauthorized 2");
+    }
+    next();
   });
-
-  console.log(pms);
-
-  if (pms.role != "editor") {
-    throw new AuthFailureError("Unaithorized 2");
-  }
-  next();
-});
 
 module.exports = {
   createTokensPair,
