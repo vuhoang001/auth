@@ -7,6 +7,9 @@ const getAllProducts = async (userId, page, size) => {
 
   const data = await projectModel
     .find(query)
+    .populate("columnIds")
+    .populate("members")
+    .populate("owner")
     .skip((page - 1) * size) // Phân trang
     .limit(size); // Giới hạn số lượng sản phẩm
 
