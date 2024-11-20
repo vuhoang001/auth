@@ -266,5 +266,5 @@ class AccessService {
       };
     };
   }
-
+}
 module.exports = new AccessService();
