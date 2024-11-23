@@ -19,7 +19,6 @@ const taskSchema = new Schema(
     },
     assignees: {
       type: Schema.Types.ObjectId,
-      default: [],
       ref: "Account",
     },
     subTaskIds: {
