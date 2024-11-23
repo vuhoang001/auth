@@ -63,6 +63,7 @@ class TaskService {
       })
       .populate({
         path: "assignees",
+        model: "Account",
         select: "-password",
       });
 

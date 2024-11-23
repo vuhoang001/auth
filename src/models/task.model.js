@@ -18,7 +18,7 @@ const taskSchema = new Schema(
       default: "Medium",
     },
     assignees: {
-      type: [Schema.Types.ObjectId],
+      type: Schema.Types.ObjectId,
       default: [],
       ref: "Account",
     },
