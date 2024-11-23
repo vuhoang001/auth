@@ -4,6 +4,7 @@ const { BadRequestError } = require("../core/error.response");
 const subTaskModel = require("../models/subTask.model");
 const { Types } = require("mongoose");
 const projectModel = require("../models/project.model");
+const { convertToObjectIdMongose } = require("../utils");
 class TaskService {
   CreateTask = async (payload, projectId, columnId) => {
     const holderProject = await projectModel.findOne({ _id: projectId });
@@ -36,11 +37,13 @@ class TaskService {
 
     const data = await columnModel
       .findOne({ _id: columnId })
-      .populate("taskIds")
-      .populate({
-        path: "assignees",
-        select: "-password",
-      });
+      .populate("taskIds");
+    // .populate({
+    //   path: "assignees",
+    //   model: "Account",
+    //   select: "-password",
+    // })
+
     return data.taskIds;
   };
 
@@ -150,6 +153,7 @@ class TaskService {
   };
 
   GetAllSubTask = async (idTask) => {
+    console.log(idtask)
     const data = await subTaskModel.find({ taskId: idTask });
 
     return data;
@@ -207,7 +211,10 @@ class TaskService {
   };
 
   GetSubTask = async (taskId) => {
-    const data = await subTaskModel.findOne({ _id: taskId });
+    console.log(taskId)
+    const data = await subTaskModel.findOne({
+      _id: convertToObjectIdMongose(taskId),
+    });
     if (!data) throw new BadRequestError("Can find SubTask");
     return data;
   };
