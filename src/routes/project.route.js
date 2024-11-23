@@ -4,7 +4,7 @@ const AsynHandle = require("../helpers/AsyncHandle");
 const ProjectController = require("../controllers/project.controller");
 const columnController = require("../controllers/column.controller");
 const taskController = require("../controllers/task.controller");
-
+const notiController = require("../controllers/notification.controller")
 const {
   authentication,
   checkStatusProject,
@@ -182,5 +182,15 @@ router.post(
   // checkPermission,
   AsyncHandle(projectController.AddMemberToProject)
 );
+
+
+// NOTI
+router.get(
+  "/:projectId/notifications",
+  checkStatusProject,
+  checkPermission,
+  AsyncHandle(notiController.getNotifications)
+);
+router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 
 module.exports = router;

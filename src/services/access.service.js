@@ -33,6 +33,18 @@ class AccessService {
     return holderAccount;
   };
 
+  GetUserByKeyword = async (keyword) => {
+    keyword = new RegExp(keyword, "i");
+    const holderAccount = await AccountModel.find({
+      $or: [{ name: keyword }, { email: keyword }],
+    }).select("-password -status");
+
+    if (holderAccount.length == 0)
+      throw new BadRequestError("Record not found");
+
+    return holderAccount;
+  };
+
   UpdateGetMe = async (idClient, payload, files) => {
     const holderAccount = await AccountModel.findOne({ _id: idClient });
     if (!holderAccount) throw new BadRequestError("Cont found information ");
@@ -80,6 +92,7 @@ class AccessService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAccount = await AccountModel.create({
+      name: username,
       name: username,
       password: hashedPassword,
       email,
@@ -252,5 +265,4 @@ class AccessService {
     };
   };
 }
-
 module.exports = new AccessService();

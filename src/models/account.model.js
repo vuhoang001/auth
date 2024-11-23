@@ -29,7 +29,8 @@ const accountSchema = new Schema(
       default: "",
     },
     phone: {
-      type: Number,
+      type: String,
+      trim: true,
     },
     address: {
       type: String,
