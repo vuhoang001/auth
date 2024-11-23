@@ -35,9 +35,15 @@ class TaskService {
     const match = holderProject.columnIds.includes(columnId);
     if (!match) throw new BadRequestError("Can not get all 2");
 
-    const data = await columnModel
-      .findOne({ _id: columnId })
-      .populate("taskIds");
+    const data = await columnModel.findOne({ _id: columnId }).populate({
+      path: "taskIds",
+      populate: [
+        {
+          path: "assignees",
+          select: "-password",
+        },
+      ],
+    });
 
     return data.taskIds;
   };
