@@ -1,10 +1,12 @@
 const AccountModel = require("../models/account.model");
 const ForgetPasswordModel = require("../models/forgetPassword.model");
+const projectModel = require("../models/project.model");
+
 const { BadRequestError, AuthFailureError } = require("../core/error.response");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { createTokensPair } = require("../auth/authUtils");
-const { getInfoData } = require("../utils/index");
+const { getInfoData, convertToObjectIdMongose } = require("../utils/index");
 const KeyTokenService = require("../services/keyToken.service");
 const { getAccountByEmail } = require("../models/repo/account.repo");
 const { sendMail } = require("../configs/nodemailer.config");
@@ -60,8 +62,26 @@ class AccessService {
     return "Success";
   };
 
-  GetAllUser = async () => {
-    const holderAccount = await AccountModel.find().select("name email _id");
+  GetAllUser = async (p) => {
+    let holderAccount;
+    if (!p) {
+      holderAccount = await AccountModel.find().select("name email _id");
+    } else {
+      holderAccount = await projectModel
+        .findOne({
+          _id: convertToObjectIdMongose(p),
+        })
+        .populate({
+          path: "members",
+          select: "-password ",
+        })
+        .populate({
+          path: "owner",
+          select: "-password",
+        })
+        .select("members owner");
+    }
+
     if (!holderAccount) throw new BadRequestError("Not found data");
     return holderAccount;
   };

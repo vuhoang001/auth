@@ -21,9 +21,10 @@ class AccessController {
   };
 
   GetAllUser = async (req, res, next) => {
+    const p = req.query.p;
     new SuccessResponse({
       message: "Get all user",
-      metadata: await AccessService.GetAllUser(),
+      metadata: await AccessService.GetAllUser(p),
     }).send(res);
   };
 

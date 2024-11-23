@@ -22,19 +22,19 @@ const projectSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "Account",
-      ref: "Account",
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "Account",
-    },
-    owner: Schema.Types.ObjectId,
 
     // Trạng thái dự án
     statusProject: {
       type: String,
-      enum: ["Khởi động dự án", "Đang tiến hành", "Đang treo", "Đã hủy", "Hoàn thành"],
-      default: "Khởi động dự án"
+      enum: [
+        "Khởi động dự án",
+        "Đang tiến hành",
+        "Đang treo",
+        "Đã hủy",
+        "Hoàn thành",
+      ],
+      default: "Khởi động dự án",
     },
     status: {
       type: String,
