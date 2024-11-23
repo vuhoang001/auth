@@ -49,17 +49,20 @@ class TaskService {
     const match = holderProject.columnIds.includes(columnId);
     if (!match) throw new BadRequestError("Can not get taks by id 2");
 
-    const data = await columnModel
-      .findOne({ _id: columnId })
-      .populate("assignees")
-      .populate({
-        path: "taskIds",
-        populate: {
+    const data = await columnModel.findOne({ _id: columnId }).populate({
+      path: "taskIds",
+      populate: [
+        {
           path: "comments.user",
           model: "Account",
           select: "_id email thumbnail name address",
         },
-      });
+        {
+          path: "assignees",
+          select: "-password",
+        },
+      ],
+    });
 
     const founded = data.taskIds.find((task) => task._id.toString() === taskId);
     if (!founded) throw new BadRequestError("Task not found");
