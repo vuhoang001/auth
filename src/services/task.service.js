@@ -144,7 +144,6 @@ class TaskService {
   };
 
   GetAllSubTask = async (idTask) => {
-    console.log(idtask);
     const data = await subTaskModel.find({ taskId: idTask });
 
     return data;
