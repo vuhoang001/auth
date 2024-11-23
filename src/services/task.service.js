@@ -38,11 +38,6 @@ class TaskService {
     const data = await columnModel
       .findOne({ _id: columnId })
       .populate("taskIds");
-    // .populate({
-    //   path: "assignees",
-    //   model: "Account",
-    //   select: "-password",
-    // })
 
     return data.taskIds;
   };
@@ -54,21 +49,14 @@ class TaskService {
     const match = holderProject.columnIds.includes(columnId);
     if (!match) throw new BadRequestError("Can not get taks by id 2");
 
-    const data = await columnModel
-      .findOne({ _id: columnId })
-      .populate({
-        path: "taskIds",
-        populate: {
-          path: "comments.user",
-          model: "Account",
-          select: "_id email thumbnail name address",
-        },
-      })
-      .populate({
-        path: "assignees",
+    const data = await columnModel.findOne({ _id: columnId }).populate({
+      path: "taskIds",
+      populate: {
+        path: "comments.user",
         model: "Account",
-        select: "-password",
-      });
+        select: "_id email thumbnail name address",
+      },
+    });
 
     const founded = data.taskIds.find((task) => task._id.toString() === taskId);
     if (!founded) throw new BadRequestError("Task not found");
@@ -153,7 +141,7 @@ class TaskService {
   };
 
   GetAllSubTask = async (idTask) => {
-    console.log(idtask)
+    console.log(idtask);
     const data = await subTaskModel.find({ taskId: idTask });
 
     return data;
@@ -211,7 +199,7 @@ class TaskService {
   };
 
   GetSubTask = async (taskId) => {
-    console.log(taskId)
+    console.log(taskId);
     const data = await subTaskModel.findOne({
       _id: convertToObjectIdMongose(taskId),
     });
