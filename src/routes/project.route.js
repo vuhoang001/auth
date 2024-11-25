@@ -188,7 +188,7 @@ router.post(
 router.get(
   "/:projectId/notifications",
   checkStatusProject,
-  checkPermission,
+  // checkPermission,
   AsyncHandle(notiController.getNotifications)
 );
 router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
