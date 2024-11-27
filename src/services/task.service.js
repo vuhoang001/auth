@@ -48,6 +48,27 @@ class TaskService {
     return data.taskIds;
   };
 
+  GetTaskByUser = async (projectId, userId) => {
+    const data = await projectModel.findOne({ _id: projectId });
+    let result = [];
+    const columnHolder = await columnModel
+      .find({
+        _id: { $in: data.columnIds },
+      })
+      .lean();
+
+    for (var col of columnHolder) {
+      const taskHolder = await taskModel.find({
+        _id: { $in: col.taskIds },
+      });
+      if (taskHolder.assignees?.toString() == userId.toString()) {
+        result.push(taskHolder);
+      }
+    }
+
+    return result;
+  };
+
   GetTaskByIdTask = async (projectId, columnId, taskId) => {
     const holderProject = await projectModel.findOne({ _id: projectId });
     if (!holderProject) throw new BadRequestError("Can not get taks by id 1");

@@ -11,6 +11,15 @@ class TaskController {
     }).send(res);
   };
 
+  GetTaskByUser = async (req, res, next) => {
+    const projectId = req.params.projectId;
+    const user = req.user.UserId;
+    new SuccessResponse({
+      message: "Get task by user",
+      metadata: await TaskService.GetTaskByUser(projectId, user),
+    }).send(res);
+  };
+
   GetAllTasks = async (req, res, next) => {
     const projectId = req.params.projectId;
     const columnId = req.params.columnId;

@@ -4,7 +4,7 @@ const AsynHandle = require("../helpers/AsyncHandle");
 const ProjectController = require("../controllers/project.controller");
 const columnController = require("../controllers/column.controller");
 const taskController = require("../controllers/task.controller");
-const notiController = require("../controllers/notification.controller")
+const notiController = require("../controllers/notification.controller");
 const {
   authentication,
   checkStatusProject,
@@ -82,6 +82,8 @@ router.delete(
 );
 
 // TASK
+
+router.get("/:projectId/me", AsyncHandle(taskController.GetTaskByUser));
 
 router.get(
   "/:projectId/columns/:columnId/task",
@@ -182,7 +184,6 @@ router.post(
   // checkPermission,
   AsyncHandle(projectController.AddMemberToProject)
 );
-
 
 // NOTI
 router.get(
