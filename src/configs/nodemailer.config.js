@@ -13,7 +13,7 @@ const sendMail = (email, link) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: process.env.EMAIL_SUBJECT,
-    html: link,
+    html: `<a href="${link}" target="blank"></>`,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
