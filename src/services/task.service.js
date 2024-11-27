@@ -49,23 +49,30 @@ class TaskService {
   };
 
   GetTaskByUser = async (projectId, userId) => {
-    const data = await projectModel.findOne({ _id: projectId });
     let result = [];
+    const data = await projectModel.findOne({ _id: projectId });
+    if (!data) throw new BadRequestError("Can not get data");
     const columnHolder = await columnModel
       .find({
         _id: { $in: data.columnIds },
       })
       .lean();
-
+    if (!columnHolder)
+      throw new BadRequestError("Can not get data of columnHolder");
     for (var col of columnHolder) {
       const taskHolder = await taskModel.find({
         _id: { $in: col.taskIds },
       });
-      if (taskHolder.assignees?.toString() == userId.toString()) {
-        result.push(taskHolder);
+      if (!taskHolder)
+        throw new BadRequestError("Can not get data of taskHolder");
+      for (var task of taskHolder) {
+        if (task.assignees == userId) {
+          result.push(task);
+        }
       }
     }
 
+    if (result.length == 0) throw new BadRequestError("no datas");
     return result;
   };
 
