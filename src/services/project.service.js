@@ -38,7 +38,8 @@ class ProjectService {
     const holderProject = await projectModel.findOne({ _id: projectId });
     if (!holderProject) throw new BadRequestError("Something went wrong");
     const hash = `${projectId}-${memberId}`;
-    const link = `${process.env.URL_CLIENT}/projects/accept/${hash}`;
+    // const link = `${process.env.URL_CLIENT}/projects/accept/${hash}`;
+    const link = `${process.env.URL_CLIENT}/confirm-join?hash=${hash}`;
     sendMail(members.email, link);
     return link;
   };

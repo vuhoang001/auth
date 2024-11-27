@@ -4,5 +4,5 @@ const router = express.Router();
 const { authentication } = require("../auth/authUtils");
 const TemplateMailController = require("../controllers/templateMail.controller");
 
-router.post('/template', )
+router.post("/template");
 module.exports = router;
