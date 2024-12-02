@@ -9,9 +9,14 @@ const socketIO = (io) => {
       socket.join(projectId);
       console.log(`User ${socket.id} joined project ${projectId}`);
     });
-
+    socket.on('chat:message', (data) => {
+      socket.emit('chat:message', {
+        user: data.user,
+        message: data.message,
+        timestamp: new Date()
+      })
+    })
     socket.on('task:notification', async (data) => {
-      console.log(data);
       try {
         const notification = new Notification({
           projectId: data.projectId,
