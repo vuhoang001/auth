@@ -35,11 +35,12 @@ const socketIO = (io) => {
     })
 
     socket.on('chat:message', (data) => {
-      const { user, recipientId, message } = data;
+      const { user, recipientId, type, message } = data;
       if (userSockets[recipientId]) {
         io.to(userSockets[recipientId]).emit('chat:message', {
           user,
           message,
+          type,
           timestamp: new Date()
         });
         socket.to(userSockets[recipientId]).emit('receive_notification', data);
