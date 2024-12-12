@@ -172,7 +172,7 @@ class AccessService {
       throw new BadRequestError("Error: can not create or update KeyStore");
     return {
       user: getInfoData({
-        fields: ["_id", "name", "email"],
+        fields: ["_id", "name", "email", "thumbnail"],
         object: foundAccount,
       }),
       accessToken: tokens.accessToken,

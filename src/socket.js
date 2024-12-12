@@ -1,5 +1,7 @@
 const Notification = require('../src/models/notification.model')
 
+
+const userSockets = ({})
 const socketIO = (io) => {
   io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
@@ -9,9 +11,7 @@ const socketIO = (io) => {
       socket.join(projectId);
       console.log(`User ${socket.id} joined project ${projectId}`);
     });
-
     socket.on('task:notification', async (data) => {
-      console.log(data);
       try {
         const notification = new Notification({
           projectId: data.projectId,
@@ -29,6 +29,26 @@ const socketIO = (io) => {
       }
     });
 
+    socket.on('register', ({ userId }) => {
+      userSockets[userId] = socket.id
+      console.log(`User ${userId} registered with socket ID ${socket.id}`);
+    })
+
+    socket.on('chat:message', (data) => {
+      const { user, recipientId, type, message } = data;
+      if (userSockets[recipientId]) {
+        io.to(userSockets[recipientId]).emit('chat:message', {
+          user,
+          message,
+          type,
+          timestamp: new Date()
+        });
+        socket.to(userSockets[recipientId]).emit('receive_notification', data);
+
+      } else {
+        console.log(`Recipient ${recipientId} is not connected.`);
+      }
+    });
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
     });
