@@ -122,27 +122,11 @@ class AccessService {
       throw new BadRequestError(
         "Error: Something went wrong! Cant create account"
       );
-
-    // const tokens = await createTokensPair({
-    //   UserId: newAccount._id,
-    //   email,
-    // });
-    // if (!tokens) throw new BadRequestError("Error: Cant create tokens");
-
-    // const keyStore = await KeyTokenService.createKeys({
-    //   user: newAccount,
-    //   refreshToken: tokens.refreshToken,
-    // });
-
-    // if (!keyStore)
-    //   throw new BadRequestError("Error: can not create or update KeyStore");
     return {
       user: getInfoData({
         fields: ["_id", "name", "email"],
         object: newAccount,
       }),
-      // accessToken: tokens.accessToken,
-      // refreshToken: tokens.refreshToken,
     };
   };
 
@@ -265,13 +249,15 @@ class AccessService {
     const holderUser = await AccountModel.findOne({ _id: userId });
     if (!holderUser) throw new BadRequestError("can not get holder user");
 
-    const match = await bcrypt.compare(holderUser.password, oldPassword);
-    if (match) {
-      newPassword = bcrypt.hash(newPassword, 10);
-      await holderUser.updateOne({ password: newPassword });
-      return 1;
+    let match = bcrypt.compare(holderUser.password, oldPassword);
+
+    if (!match) {
+      throw new BadRequestError("Password is wrong");
     }
-    return 0;
+
+    newPassword = await bcrypt.hash(newPassword, 10);
+    await holderUser.updateOne({ password: newPassword });
+    return 1;
   };
 
   resetPassword = async (password, resetToken, email) => {
