@@ -8,6 +8,19 @@ class AccessController {
     }).send(res);
   };
 
+  ChangePassword = async (req, res, next) => {
+    const user = req.user.UserId;
+    const { newPassword, oldPassword } = req.body;
+    new SuccessResponse({
+      message: "change password success",
+      metadata: await AccessService.changePassword(
+        oldPassword,
+        newPassword,
+        user
+      ),
+    }).send(res);
+  };
+
   EditGetMe = async (req, res, next) => {
     const { files } = req;
     new SuccessResponse({

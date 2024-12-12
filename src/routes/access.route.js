@@ -4,6 +4,7 @@ const AsynHandle = require("../helpers/AsyncHandle");
 const AccessController = require("../controllers/access.controller");
 const { authentication } = require("../auth/authUtils");
 const { uploadDisk } = require("../configs/multer.config");
+const AsyncHandle = require("../helpers/AsyncHandle");
 
 router.get("/socket", AsynHandle(AccessController.socket));
 
@@ -35,5 +36,7 @@ router.get("/GetByKey/:keyword", AsynHandle(AccessController.GetUserByKeyword));
 router.post("/logout", AsynHandle(AccessController.logout));
 
 router.post("/handle-refresh", AsynHandle(AccessController.handleRefreshToken));
+
+router.post("/change-password", AsynHandle(AccessController.ChangePassword));
 
 module.exports = router;

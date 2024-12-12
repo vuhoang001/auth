@@ -259,6 +259,21 @@ class AccessService {
     return link;
   };
 
+  changePassword = async (oldPassword, newPassword, userId) => {
+    if (!oldPassword || !newPassword)
+      throw new BadRequestError("can not get new password or old password");
+    const holderUser = await AccountModel.findOne({ _id: userId });
+    if (!holderUser) throw new BadRequestError("can not get holder user");
+
+    const match = await bcrypt.compare(holderUser.password, oldPassword);
+    if (match) {
+      newPassword = bcrypt.hash(newPassword, 10);
+      await holderUser.updateOne({ password: newPassword });
+      return 1;
+    }
+    return 0;
+  };
+
   resetPassword = async (password, resetToken, email) => {
     const passwordResetToken = await ForgetPasswordModel.findOne({ email });
     console.log("resetToeknn", passwordResetToken);
