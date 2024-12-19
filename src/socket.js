@@ -1,5 +1,5 @@
 const Notification = require('../src/models/notification.model')
-
+const ChatMessage = require('../src/models/chat.model')
 
 const userSockets = ({})
 const socketIO = (io) => {
@@ -32,21 +32,46 @@ const socketIO = (io) => {
     socket.on('register', ({ userId }) => {
       userSockets[userId] = socket.id
       console.log(`User ${userId} registered with socket ID ${socket.id}`);
+      io.emit('user:status', {
+        userId: userId,
+        status: 'online'
+      })
     })
 
-    socket.on('chat:message', (data) => {
+    socket.on('chat:message', async (data) => {
       const { user, recipientId, message } = data;
-      if (userSockets[recipientId]) {
-        io.to(userSockets[recipientId]).emit('chat:message', {
+      try {
+        const chatMessage = new ChatMessage({
+          senderId: user._id,
+          recipientId: recipientId,
+          message: message
+        })
+        await chatMessage.save()
+        const messageData = {
+          messageId: chatMessage._id,
           user,
           message,
-          timestamp: new Date()
-        });
-        socket.to(userSockets[recipientId]).emit('receive_notification', data);
+          timestamp: chatMessage.createdAt
+        }
+        if (userSockets[recipientId]) {
+          io.to(userSockets[recipientId]).emit('chat:message', {
+            user,
+            message,
+            timestamp: new Date()
+          });
 
-      } else {
-        console.log(`Recipient ${recipientId} is not connected.`);
+          socket.to(userSockets[recipientId]).emit('receive_notification', {
+            type: 'new_message',
+            ...messageData
+          });
+
+        } else {
+          console.log(`Recipient ${recipientId} is not connected.`);
+        }
+      } catch (error) {
+        console.log(error);
       }
+
     });
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);

@@ -5,6 +5,7 @@ const ProjectController = require("../controllers/project.controller");
 const columnController = require("../controllers/column.controller");
 const taskController = require("../controllers/task.controller");
 const notiController = require("../controllers/notification.controller");
+const chatController = require("../controllers/chat.controller")
 const {
   authentication,
   checkStatusProject,
@@ -191,6 +192,12 @@ router.get(
   checkStatusProject,
   // checkPermission,
   AsyncHandle(notiController.getNotifications)
+);
+// Chat
+router.get(
+  "/chat/history/:userId/:otherUserId",
+  checkStatusProject,
+  AsyncHandle(chatController.getChatHistory)
 );
 router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 
