@@ -193,12 +193,14 @@ router.get(
   // checkPermission,
   AsyncHandle(notiController.getNotifications)
 );
-// Chat
-router.get(
-  "/chat/history/:userId/:otherUserId",
-  checkStatusProject,
-  AsyncHandle(chatController.getChatHistory)
-);
+// // Chat
+// router.get(
+//   // "/chat/history/:userId/:otherUserId",
+//   // "testttt",
+//   // checkStatusProject,
+
+//   AsyncHandle(chatController.getChatHistory)
+// );
 router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 
 module.exports = router;
