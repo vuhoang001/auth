@@ -192,6 +192,9 @@ router.get(
   // checkPermission,
   AsyncHandle(notiController.getNotifications)
 );
+router.patch(
+  "/:notificationId/read", checkStatusProject, AsyncHandle(notiController.markAsRead)
+)
 router.get("/accept/:link", AsynHandle(projectController.AcceptToProject));
 
 module.exports = router;
