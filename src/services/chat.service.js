@@ -5,9 +5,11 @@ class ChatService {
   ChatHistory = async (UserId, OrtherUserId) => {
 
     const message = await chatModel.find({
-      senderId: UserId,
-      recipientId: OrtherUserId
-    })
+      $or: [
+        { senderId: UserId, recipientId: OrtherUserId },
+        { senderId: OrtherUserId, recipientId: UserId }
+      ]
+    }).sort({ createAt: 1 })
     return message
   }
 }
