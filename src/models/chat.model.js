@@ -3,12 +3,12 @@ const { Schema, model } = require('mongoose')
 const chatMessageSchema = new Schema({
   senderId: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Account',
     required: true
   },
   recipientId: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Account',
     required: true
   },
   message: {

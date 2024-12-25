@@ -88,7 +88,7 @@ class AccessService {
 
   GetUserById = async (UserId) => {
     const holderAccount = await AccountModel.findOne({ _id: UserId }).select(
-      "name email _id"
+      "name thumbnail email _id"
     );
     if (!holderAccount) throw new BadRequestError("Not found data");
     return holderAccount;

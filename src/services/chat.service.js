@@ -10,6 +10,10 @@ class ChatService {
         { senderId: OrtherUserId, recipientId: UserId }
       ]
     }).sort({ createAt: 1 })
+      .populate({
+        path: 'senderId',
+        select: 'name email'
+      })
     return message
   }
 }
