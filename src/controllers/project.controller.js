@@ -18,6 +18,17 @@ class ProjectController {
     }).send(res);
   };
 
+  RemoveMemberFromProject = async (req, res, next) => {
+    const userId = req.user.UserId
+    const projectId = req.params.projectId
+    const { memberId } = req.body
+
+    new SuccessResponse({
+      message: "Remove successfully",
+      metadata: await ProjectService.RemoveMemnberFromProject(projectId, userId, memberId)
+    }).send(res)
+  }
+
   AcceptToProject = async (req, res, next) => {
     const link = req.params.link
     new SuccessResponse({

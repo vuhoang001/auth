@@ -44,7 +44,23 @@ class ProjectService {
     sendMail(members.email, link, subject);
     return link;
   };
-
+  RemoveMemnberFromProject = async (projectId, userId, memberId) => {
+    console.log("Toi la dang ngu ngo")
+    console.log(projectId)
+    console.log(userId);
+    console.log(memberId)
+    var holder = await projectModel.findOne({ owner: convertToObjectIdMongose(userId) })
+    if (holder == null) {
+      throw new AuthFailureError("You dont have per mit sun ");
+    }
+    const res = await projectModel.updateOne(
+      { _id: convertToObjectIdMongose(projectId), owner: convertToObjectIdMongose(userId) },
+      {
+        $pull: { members: convertToObjectIdMongose(memberId) }
+      }
+    );
+    return true
+  }
   AcceptedToProject = async (link) => {
     const result = link.split("-");
     console.log(result[0], result[1]);

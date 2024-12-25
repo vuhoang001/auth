@@ -24,6 +24,7 @@ router.use(authentication);
 router.post("/", AsyncHandle(ProjectController.CreateProject));
 router.get("/", AsynHandle(ProjectController.GetAllProjects));
 
+router.delete("/:projectId/remove-from-project", AsyncHandle(ProjectController.RemoveMemberFromProject))
 router.patch(
   "/:projectId",
   checkStatusProject,

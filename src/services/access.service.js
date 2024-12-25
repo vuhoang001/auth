@@ -286,5 +286,16 @@ class AccessService {
       holderAccount,
     };
   };
+
+
+  ForgetPassword = async (email) => {
+    const holderUser = await AccountModel.findOne({ email: email });
+    if (holderUser == null) {
+      throw new BadRequestError("Cant find user")
+    }
+
+      sendMail(email, )
+
+  }
 }
 module.exports = new AccessService();
