@@ -239,7 +239,8 @@ class AccessService {
 
     if (!forgetPassword) throw new BadRequestError("Error: Cant create OTP");
     const link = `${process.env.URL_PORT}/passwordReset?token=${resetToken}&email=${email}`;
-    sendMail(email, link);
+    const subject = "This is your otp"
+    sendMail(email, link, subject);
     return link;
   };
 

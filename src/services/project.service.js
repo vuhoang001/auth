@@ -40,7 +40,8 @@ class ProjectService {
     const hash = `${projectId}-${memberId}`;
     // const link = `${process.env.URL_CLIENT}/projects/accept/${hash}`;
     const link = `${process.env.URL_CLIENT}/confirm-join?hash=${hash}`;
-    sendMail(members.email, link);
+    const subject = "Lời mời tham gia dự án!"
+    sendMail(members.email, link, subject);
     return link;
   };
 
@@ -49,11 +50,11 @@ class ProjectService {
     console.log(result[0], result[1]);
     const holderProject = await projectModel.findOne({ _id: result[0] });
     if (!holderProject) {
-      throw new BadRequestError("Somethign went wrong ");
+      throw new BadRequestError("Something went wrong ");
     }
     const holderUser = await accountModel.findOne({ _id: result[1] });
     if (!holderUser) {
-      throw new BadRequestError("Somethign went wrong ");
+      throw new BadRequestError("Something went wrong ");
     }
 
     const res = await projectModel.findOneAndUpdate(

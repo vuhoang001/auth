@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendMail = (email, link) => {
+const sendMail = (email, link, subject) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -12,7 +12,7 @@ const sendMail = (email, link) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: process.env.EMAIL_SUBJECT,
+    subject: subject,
 
     html: `<a href="${link}" target="_blank">${link}</a>`,
   };
