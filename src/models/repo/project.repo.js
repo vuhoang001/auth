@@ -1,8 +1,9 @@
 const projectModel = require("../project.model");
 
-const getAllProducts = async (userId, page, size) => {
+const getAllProducts = async (userId, page, size, search) => {
   const query = {
     $or: [{ owner: userId }, { members: userId }],
+    ...(search && {projectName: {$regex: search, $options: "i"}})
   };
 
   const data = await projectModel

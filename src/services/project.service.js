@@ -81,8 +81,8 @@ class ProjectService {
     return "Success!";
   };
 
-  GetProjects = async (userId, page, size) => {
-    const projects = await getAllProducts(userId, page, size);
+  GetProjects = async (userId, page, size, query) => {
+    const projects = await getAllProducts(userId, page, size, query);
     if (!projects) throw new BadRequestError("Error: Cant find prjects");
     return projects;
   };

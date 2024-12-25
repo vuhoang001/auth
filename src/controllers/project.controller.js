@@ -19,12 +19,12 @@ class ProjectController {
   };
 
   AcceptToProject = async (req, res, next) => {
-    const link = req.params.link 
+    const link = req.params.link;
     new SuccessResponse({
-      message: "Add to project success", 
-      metadata: await ProjectService.AcceptedToProject(link)
-    }).send(res)
-  }
+      message: "Add to project success",
+      metadata: await ProjectService.AcceptedToProject(link),
+    }).send(res);
+  };
   CreateProject = async (req, res, next) => {
     const userId = req.user.UserId;
     new SuccessResponse({
@@ -52,9 +52,10 @@ class ProjectController {
     const userId = req.user.UserId;
     const page = req.query.page || 1;
     const size = req.query.size || 50;
+    const query = req.query.query || "";
     new SuccessResponse({
       message: "Get all projects",
-      metadata: await ProjectService.GetProjects(userId, page, size),
+      metadata: await ProjectService.GetProjects(userId, page, size, query),
     }).send(res);
   };
 
