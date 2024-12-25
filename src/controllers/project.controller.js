@@ -53,6 +53,7 @@ class ProjectController {
     const search = req.query.search
     const page = req.query.page || 1;
     const size = req.query.size || 50;
+    const query = req.query.query || "";
     new SuccessResponse({
       message: "Get all projects",
       metadata: await ProjectService.GetProjects(userId, page, size, search),

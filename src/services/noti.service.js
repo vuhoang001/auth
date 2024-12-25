@@ -10,7 +10,6 @@ class NotiService {
           select: 'username email' // Adjust the fields you want to include from the Account model
         })
         .exec();
-
       return notifications;
     } catch (error) {
       console.error('Error fetching notifications:', error);

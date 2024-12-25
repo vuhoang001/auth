@@ -122,27 +122,11 @@ class AccessService {
       throw new BadRequestError(
         "Error: Something went wrong! Cant create account"
       );
-
-    // const tokens = await createTokensPair({
-    //   UserId: newAccount._id,
-    //   email,
-    // });
-    // if (!tokens) throw new BadRequestError("Error: Cant create tokens");
-
-    // const keyStore = await KeyTokenService.createKeys({
-    //   user: newAccount,
-    //   refreshToken: tokens.refreshToken,
-    // });
-
-    // if (!keyStore)
-    //   throw new BadRequestError("Error: can not create or update KeyStore");
     return {
       user: getInfoData({
         fields: ["_id", "name", "email"],
         object: newAccount,
       }),
-      // accessToken: tokens.accessToken,
-      // refreshToken: tokens.refreshToken,
     };
   };
 
@@ -172,7 +156,7 @@ class AccessService {
       throw new BadRequestError("Error: can not create or update KeyStore");
     return {
       user: getInfoData({
-        fields: ["_id", "name", "email"],
+        fields: ["_id", "name", "email", "thumbnail"],
         object: foundAccount,
       }),
       accessToken: tokens.accessToken,
@@ -257,6 +241,23 @@ class AccessService {
     const link = `${process.env.URL_PORT}/passwordReset?token=${resetToken}&email=${email}`;
     sendMail(email, link);
     return link;
+  };
+
+  changePassword = async (oldPassword, newPassword, userId) => {
+    if (!oldPassword || !newPassword)
+      throw new BadRequestError("can not get new password or old password");
+    const holderUser = await AccountModel.findOne({ _id: userId });
+    if (!holderUser) throw new BadRequestError("can not get holder user");
+
+    let match = bcrypt.compare(holderUser.password, oldPassword);
+
+    if (!match) {
+      throw new BadRequestError("Password is wrong");
+    }
+
+    newPassword = await bcrypt.hash(newPassword, 10);
+    await holderUser.updateOne({ password: newPassword });
+    return 1;
   };
 
   resetPassword = async (password, resetToken, email) => {

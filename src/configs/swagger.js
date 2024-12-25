@@ -1,4 +1,3 @@
-const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const path = require("path"); // Import path để xử lý đường dẫn
