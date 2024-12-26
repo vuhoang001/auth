@@ -6,25 +6,19 @@ const getChatHistory = async (req, res) => {
 
   const otherUserId = req.query.userid
   const userId = req.user.UserId
-  // try {
-
-
-  //   const message = await ChatMessage.find({
-  //     $or: [
-  //       { senderId: userId, recipientId: otherUserId },
-  //       { senderId: otherUserId, recipientId: userId }
-  //     ]
-  //   }).sort({ createAt: 1 })
-  //   req.json(message)
-  // } catch (error) {
-  //   res.status(500).json({ message: error.message })
-  // }
-
   new SuccessResponse({
     message: 'Get message success',
     metadata: await chatService.ChatHistory(userId, otherUserId)
   }).send(res)
 }
+const removeChat = async (req, res) => {
+  const userId = req.user.UserId
+  const messageId = req.params.messageId
+  new SuccessResponse({
+    message: 'Remove message success',
+    metadata: await chatService.RemoveChat(userId, messageId)
+  }).send(res)
+}
 module.exports = {
-  getChatHistory
+  getChatHistory, removeChat
 };

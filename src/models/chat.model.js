@@ -19,6 +19,10 @@ const chatMessageSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  status: {
+    type: Boolean,
+    default: true
+  },
   isRead: {
     type: Boolean,
     default: false

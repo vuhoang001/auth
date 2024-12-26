@@ -7,7 +7,7 @@ const { authentication } = require('../auth/authUtils')
 
 router.use(authentication)
 router.get("/", AsyncHandle(chatController.getChatHistory))
-
+router.post('/remove/:messageId', AsyncHandle(chatController.removeChat))
 module.exports = router
 
 

@@ -44,19 +44,22 @@ const socketIO = (io) => {
         const chatMessage = new ChatMessage({
           senderId: user._id,
           recipientId: recipientId,
-          message: message
+          message: message,
+          status: true
         })
         await chatMessage.save()
         const messageData = {
           messageId: chatMessage._id,
           user,
           message,
+          status: true,
           timestamp: chatMessage.createdAt
         }
         if (userSockets[recipientId]) {
           io.to(userSockets[recipientId]).emit('chat:message', {
             user,
             message,
+            status: true,
             timestamp: new Date()
           });
 
