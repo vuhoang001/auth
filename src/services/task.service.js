@@ -51,12 +51,14 @@ class TaskService {
   GetTaskByUser = async (projectId, userId) => {
     let result = [];
     const data = await projectModel.findOne({ _id: projectId });
+    // console.log(data)
     if (!data) throw new BadRequestError("Can not get data");
     const columnHolder = await columnModel
       .find({
         _id: { $in: data.columnIds },
       })
       .lean();
+    // console.log(columnHolder)
     if (!columnHolder)
       throw new BadRequestError("Can not get data of columnHolder");
     for (var col of columnHolder) {
@@ -67,6 +69,8 @@ class TaskService {
         throw new BadRequestError("Can not get data of taskHolder");
       for (var task of taskHolder) {
         if (task.assignees == userId) {
+          task = task.toObject()
+          task.columnId = col._id
           result.push(task);
         }
       }
