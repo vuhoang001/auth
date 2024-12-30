@@ -15,6 +15,8 @@ const socketIO = (io) => {
       try {
         const notification = new Notification({
           projectId: data.projectId,
+          columnIds: data.columnIds,
+          taskId: data.taskId,
           message: data.message,
           type: data.type,
           user: data.user,

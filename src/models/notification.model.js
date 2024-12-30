@@ -6,6 +6,14 @@ const notificationSchema = new Schema({
     ref: 'Project',
     required: true
   },
+  columnIds: {
+    type: String,
+    default: null
+  },
+  taskId: {
+    type: String,
+    default: null
+  },
   message: {
     type: String,
     required: true
