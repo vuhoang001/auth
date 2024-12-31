@@ -8,7 +8,7 @@ class ChatService {
         { senderId: UserId, recipientId: OrtherUserId },
         { senderId: OrtherUserId, recipientId: UserId }
       ]
-    }).sort({ createAt: 1 })
+    }).sort({ createdAt: 1 })
       .populate({
         path: 'senderId',
         select: 'name email'
